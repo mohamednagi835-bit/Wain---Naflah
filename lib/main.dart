@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,9 +6,12 @@ import 'package:tourism_app/Constans.dart';
 import 'package:tourism_app/Screens/splash_screen.dart';
 import 'package:tourism_app/cubits/ChangeLanguagCubit.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
+import 'package:tourism_app/firebase_options.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiBlocProvider(
       providers: [
