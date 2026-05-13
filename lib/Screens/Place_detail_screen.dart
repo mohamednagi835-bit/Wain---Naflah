@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/Models/comment.dart';
 import 'package:tourism_app/Models/place.dart';
 import 'package:tourism_app/Widgets/Custom_image.dart';
+import 'package:tourism_app/Widgets/Place_card.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
@@ -104,13 +105,70 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                       left: 16,
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.pop(context),
+                        child: Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: IconButton(
+                            color: Colors.black,
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () => Navigator.pop(context),
+                          ),
                         ),
                       ),
                     ),
                   ],
+                ),
+
+                ///  USER HEADER (NEW)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      ///  Avatar
+                      // CircleAvatar(
+                      //   radius: 22,
+                      //   backgroundColor: Colors.grey.shade200,
+                      //   backgroundImage: NetworkImage(place.userImage),
+                      // ),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.green.shade100,
+                        child: const Icon(Icons.person, color: Colors.green),
+                      ),
+                      const SizedBox(width: 10),
+
+                      ///  Name + time
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              place.userName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+
+                            const SizedBox(height: 3),
+
+                            Text(
+                              formatTime(context, place.createdAt),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      /// (optional future)
+                      Icon(Icons.more_vert, color: Colors.grey[600]),
+                    ],
+                  ),
                 ),
 
                 /// 📄 CONTENT
@@ -244,7 +302,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                     margin: const EdgeInsets.only(bottom: 12),
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
+                                      color: Colors.white,
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Row(

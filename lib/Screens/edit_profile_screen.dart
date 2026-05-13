@@ -11,12 +11,19 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final formKey = GlobalKey<FormState>();
 
-  final TextEditingController firstNameController =
-      TextEditingController(text: "محمد");
-  final TextEditingController lastNameController =
-      TextEditingController(text: "ناجي");
-  final TextEditingController emailController =
-      TextEditingController(text: "example@email.com");
+  final TextEditingController firstNameController = TextEditingController(
+    text: "محمد",
+  );
+  final TextEditingController lastNameController = TextEditingController(
+    text: "ناجي",
+  );
+  final TextEditingController emailController = TextEditingController(
+    text: "example@email.com",
+  );
+
+  final TextEditingController paawordController = TextEditingController(
+    text: "Password",
+  );
 
   String selectedGender = "male";
 
@@ -41,7 +48,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               /// 👤 PROFILE IMAGE
               Center(
                 child: Stack(
@@ -81,7 +87,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               /// 🏷️ FIRST NAME
               _buildLabel(loc.firstName),
-              _buildField(firstNameController, loc.firstName),
+              _buildField(lastNameController, loc.firstName),
 
               const SizedBox(height: 16),
 
@@ -97,37 +103,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               const SizedBox(height: 16),
 
-              /// 🏷️ GENDER
-              _buildLabel(loc.gender),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: DropdownButtonFormField<String>(
-                  initialValue: selectedGender,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                  items: [
-                    DropdownMenuItem(
-                      value: "male",
-                      child: Text(loc.male),
-                    ),
-                    DropdownMenuItem(
-                      value: "female",
-                      child: Text(loc.female),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      selectedGender = value!;
-                    });
-                  },
-                ),
-              ),
+              _buildLabel(loc.password),
+              _buildField(paawordController, loc.password),
 
+              const SizedBox(height: 16),
+
+              /// 🏷️ GENDER
+              // _buildLabel(loc.gender),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 12),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(14),
+              //   ),
+              //   child: DropdownButtonFormField<String>(
+              //     initialValue: selectedGender,
+              //     decoration: const InputDecoration(border: InputBorder.none),
+              //     items: [
+              //       DropdownMenuItem(value: "male", child: Text(loc.male)),
+              //       DropdownMenuItem(value: "female", child: Text(loc.female)),
+              //     ],
+              //     onChanged: (value) {
+              //       setState(() {
+              //         selectedGender = value!;
+              //       });
+              //     },
+              //   ),
+              // ),
               const SizedBox(height: 30),
 
               /// 💾 SAVE BUTTON
@@ -165,19 +167,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       padding: const EdgeInsets.only(bottom: 6),
       child: Text(
         text,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     );
   }
 
   /// 📝 FIELD
-  Widget _buildField(
-    TextEditingController controller,
-    String hint,
-  ) {
+  Widget _buildField(TextEditingController controller, String hint) {
     return TextFormField(
       controller: controller,
       validator: (value) {
@@ -188,7 +184,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
       decoration: InputDecoration(
         hintText: hint,
-        filled: true,
+        // filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.all(14),
         border: OutlineInputBorder(

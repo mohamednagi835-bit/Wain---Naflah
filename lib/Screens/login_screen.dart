@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tourism_app/Models/user.dart';
+import 'package:tourism_app/Helpers/Handle_error_message.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/Signup_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
+import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Launguae_dialog.dart';
+import 'package:tourism_app/Widgets/No_internet.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         centerTitle: true,
 
-        /// 🏷️ Title
+        ///  Title
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -49,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
 
-        /// 🌍 Language Button
+        ///  Language Button
         actions: [
           IconButton(
             icon: Container(
@@ -95,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🏷️ Title
+                ///  Title
                 Text(
                   loc.welcomeBack,
                   style: const TextStyle(
@@ -109,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 35),
 
-                /// 📧 Email
+                ///  Email
                 CustomTextField(
                   textEditingController: emailController,
                   hint: loc.email,
@@ -118,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 🔑 Password
+                ///  Password
                 CustomTextField(
                   textEditingController: passwordController,
                   hint: loc.password,
@@ -127,30 +131,88 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 25),
 
-                /// 🔘 Button
+                ///  Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      isLoading = true;
+                      setState(() {});
+                      // showErrorMessageDialog(
+                      //   context,
+                      //   message: 'Invalid password',
+                      // );
                       if (formKey.currentState!.validate()) {
-                        User currentUSer = User(
-                          email: emailController.text,
-                          paaword: passwordController.text,
-                          firsrName: 'firsrName',
-                          lastName: 'lastName',
-                          gender: 'gender',
-                        );
-                        print('user: ${currentUSer.email}');
-                        print('password: ${currentUSer.paaword}');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return HomeScreen();
-                            },
-                          ),
-                        );
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) {
+                        //       return HomeScreen();
+                        //     },
+                        //   ),
+                        // );
+
+                        try {
+                          var auth = FirebaseAuth.instance;
+                          UserCredential userCredential = await auth
+                              .signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+
+                          isLoading = false;
+                          setState(() {});
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return HomeScreen();
+                              },
+                            ),
+                          );
+                          showSuccessToast(context, 'Loggined successfully');
+                        } on FirebaseAuthException catch (e) {
+                          isLoading = false;
+                          setState(() {});
+                          switch (e.code) {
+                            case 'user-not-found':
+                              showErrorDialog(
+                                context,
+                                message: getFirebaseErrorMessage(e.code),
+                              );
+
+                            case 'wrong-password':
+                              showErrorDialog(
+                                context,
+                                message: getFirebaseErrorMessage(e.code),
+                              );
+
+                            case 'email-already-in-use':
+                              showErrorDialog(
+                                context,
+                                message: getFirebaseErrorMessage(e.code),
+                              );
+
+                            case 'weak-password':
+                              showErrorDialog(
+                                context,
+                                message: getFirebaseErrorMessage(e.code),
+                              );
+
+                            case 'invalid-email':
+                              showErrorDialog(
+                                context,
+                                message: getFirebaseErrorMessage(e.code),
+                              );
+
+                            case 'network-request-failed':
+                              showNoInternetDialog(context);
+
+                            default:
+                              showErrorDialog(context);
+                          }
+                        }
                       } else {
                         autovalidateMode = AutovalidateMode.always;
                         setState(() {});
@@ -162,16 +224,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: Text(
-                      loc.login,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            loc.login,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                   ),
                 ),
 
                 SizedBox(height: 10),
 
-                /// ✨ BEAUTIFUL TOGGLE DIVIDER (INTEGRATED)
+                ///  BEAUTIFUL TOGGLE DIVIDER (INTEGRATED)
                 const SizedBox(height: 25),
 
                 Row(
@@ -187,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 🔄 Clickable toggle
+                ///  Clickable toggle
                 GestureDetector(
                   onTap: () {
                     Navigator.pushReplacement(
@@ -229,4 +297,45 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+void showSuccessToast(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      duration: const Duration(seconds: 2),
+
+      content: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF2E7D32), // professional green
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10),
+          ],
+        ),
+        child: Row(
+          children: [
+            /// ✅ ICON
+            const Icon(Icons.check_circle, color: Colors.white),
+
+            const SizedBox(width: 10),
+
+            /// 📝 TEXT
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

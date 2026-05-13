@@ -28,7 +28,10 @@ class _LanguageScreenState extends State<ChangeLanguage> {
 
       /// 🏷️ AppBar
       appBar: AppBar(
-        title: Text(loc.language),
+        title: Text(
+          loc.language,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,

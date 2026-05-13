@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Change_language.dart';
 import 'package:tourism_app/Screens/edit_profile_screen.dart';
-import 'package:tourism_app/Screens/test_screen.dart';
+import 'package:tourism_app/Widgets/LogoutDialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
@@ -84,20 +84,19 @@ class AccountScreen extends StatelessWidget {
             const SizedBox(height: 10),
 
             /// 📊 STATS
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildStat("12", loc.places),
-                  _buildStat("45", loc.likes),
-                  _buildStat("8", loc.comments),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 10),
+            // Container(
+            //   color: Colors.white,
+            //   padding: const EdgeInsets.symmetric(vertical: 20),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //     children: [
+            //       _buildStat("12", loc.places),
+            //       _buildStat("45", loc.likes),
+            //       _buildStat("8", loc.comments),
+            //     ],
+            //   ),
+            // ),
+            const SizedBox(height: 0),
 
             /// ⚙️ OPTIONS
             Container(
@@ -151,7 +150,9 @@ class AccountScreen extends StatelessWidget {
                     icon: Icons.logout,
                     title: loc.logout,
                     color: Colors.red,
-                    onTap: () {},
+                    onTap: () {
+                      showLogoutDialog(context);
+                    },
                   ),
                 ],
               ),

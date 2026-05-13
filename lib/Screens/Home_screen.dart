@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Global_variables.dart';
+import 'package:tourism_app/Models/user.dart';
 import 'package:tourism_app/Screens/Feed_screen.dart';
 import 'package:tourism_app/Screens/Map_screen.dart';
 import 'package:tourism_app/Screens/Profile_screen.dart';
@@ -66,4 +70,28 @@ class _HomeScreenState extends State<HomeScreen> {
       return Image.asset('assets/images/map.png');
     }
   }
+}
+
+Future<void> getUser() async {
+  final user = FirebaseAuth.instance.currentUser;
+
+  final email = user?.email;
+
+  print(email);
+  final query = await FirebaseFirestore.instance
+      .collection('users')
+      .where('email', isEqualTo: email)
+      .limit(1)
+      .get();
+
+  if (query.docs.isEmpty) return;
+
+  final doc = query.docs.first.data();
+  currentUser = AppuUSer(
+    email: doc['email'] ?? '',
+    paaword: doc['password'] ?? '',
+    firsrName: doc['First Name'] ?? '',
+    lastName: doc['Last Name'] ?? '',
+    phoneNumber: doc['Phone Number'] ?? '',
+  );
 }

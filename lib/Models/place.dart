@@ -9,15 +9,25 @@ class PlaceModel {
   int likesCount;
   int commentCount;
   List<CommentModel> comments;
+  String userName;
+  String userImage;
+  DateTime createdAt;
+  int retersNO;
+  final String id;
 
   PlaceModel({
     required this.name,
     required this.description,
     required this.image,
-    required this.rating,
+    this.rating = 0.0,
     this.isLiked = false,
     this.likesCount = 0,
     this.commentCount = 0,
     this.comments = const [],
+    required this.userName,
+    required this.userImage,
+    required this.createdAt,
+    this.retersNO = 0,
+    this.id = '',
   });
 }

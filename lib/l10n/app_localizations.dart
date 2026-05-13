@@ -358,6 +358,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'save'**
   String get save;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

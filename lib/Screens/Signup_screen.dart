@@ -1,8 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tourism_app/Models/user.dart';
+import 'package:tourism_app/Helpers/Handle_error_message.dart';
 import 'package:tourism_app/Screens/login_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
+import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Launguae_dialog.dart';
+import 'package:tourism_app/Widgets/No_internet.dart';
+import 'package:tourism_app/Widgets/Phone_field.dart';
+import 'package:tourism_app/Widgets/Success_dialog.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -20,8 +26,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final passwordController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
-
-  String? selectedGender;
+  final phoneNumberController = TextEditingController();
+  String phoneNumber = '';
+  bool isLoading = false;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -146,55 +154,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 🚻 Gender Dropdown
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        loc.gender,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        loc.phoneNumber,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: Colors.black87,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  //  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: DropdownButtonFormField<String>(
-                    initialValue: selectedGender,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                    hint: Text(loc.gender),
-                    items: [
-                      DropdownMenuItem(value: "male", child: Text(loc.male)),
-                      DropdownMenuItem(
-                        value: "female",
-                        child: Text(loc.female),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGender = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return loc.requiredField;
-                      }
-                      return null;
-                    },
-                  ),
+
+                PhoneNumberField(
+                  controller: phoneNumberController,
+                  onChanged: (fullNumber) {
+                    phoneNumber = fullNumber;
+                  },
                 ),
 
+                // CustomTextField(
+                //   textEditingController: phoneNumberController,
+                //   hint: 'hint',
+                //   label: 'Phone Number',
+                // ),
+
+                /// 🚻 Gender Dropdown
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         loc.gender,
+                //         style: const TextStyle(
+                //           fontSize: 14,
+                //           fontWeight: FontWeight.w600,
+                //           color: Colors.black87,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(height: 10),
+                // Container(
+                //   //  padding: const EdgeInsets.symmetric(horizontal: 16),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.circular(14),
+                //   ),
+                //   child: DropdownButtonFormField<String>(
+                //     initialValue: selectedGender,
+                //     decoration: const InputDecoration(border: InputBorder.none),
+                //     hint: Text(loc.gender),
+                //     items: [
+                //       DropdownMenuItem(value: "male", child: Text(loc.male)),
+                //       DropdownMenuItem(
+                //         value: "female",
+                //         child: Text(loc.female),
+                //       ),
+                //     ],
+                //     onChanged: (value) {
+                //       setState(() {
+                //         selectedGender = value;
+                //       });
+                //     },
+                //     validator: (value) {
+                //       if (value == null) {
+                //         return loc.requiredField;
+                //       }
+                //       return null;
+                //     },
+                //   ),
+                // ),
                 const SizedBox(height: 25),
 
                 /// 🔘 Sign Up Button
@@ -202,25 +240,96 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        User currentUser = User(
-                          email: emailController.text,
-                          paaword: passwordController.text,
-                          firsrName: firstNameController.text,
-                          lastName: lastNameController.text,
-                          gender: selectedGender!,
-                        );
-                        print("Email: ${emailController.text}");
-                        print("Password: ${passwordController.text}");
-                        print("First: ${firstNameController.text}");
-                        print("Last: ${lastNameController.text}");
-                        print("Gender: $selectedGender");
-                      } else {
-                        setState(() {
-                          autovalidateMode = AutovalidateMode.onUserInteraction;
+                    onPressed: () async {
+                      print('printed :$phoneNumber');
+                      isLoading = true;
+                      setState(() {});
+                      try {
+                        var auth = FirebaseAuth.instance;
+                        UserCredential userCredential = await auth
+                            .createUserWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                        await users.add({
+                          'First Name': firstNameController.text,
+                          'Last Name': lastNameController.text,
+                          'email': emailController.text,
+                          'Password': passwordController.text,
+                          'Phone Number': phoneNumber,
                         });
+                        // currentUser = AppuUSer(
+                        //   email: emailController.text,
+                        //   paaword: passwordController.text,
+                        //   firsrName: firstNameController.text,
+                        //   lastName: lastNameController.text,
+                        //   phoneNumber: phoneNumber,
+                        // );
+                        isLoading = false;
+                        setState(() {});
+                        showSuccessDialog(context, false);
+                      } on FirebaseAuthException catch (e) {
+                        isLoading = false;
+                        setState(() {});
+                        switch (e.code) {
+                          case 'user-not-found':
+                            showErrorDialog(
+                              context,
+                              message: getFirebaseErrorMessage(e.code),
+                            );
+
+                          case 'wrong-password':
+                            showErrorDialog(
+                              context,
+                              message: getFirebaseErrorMessage(e.code),
+                            );
+
+                          case 'email-already-in-use':
+                            showErrorDialog(
+                              context,
+                              message: getFirebaseErrorMessage(e.code),
+                            );
+
+                          case 'weak-password':
+                            showErrorDialog(
+                              context,
+                              message: getFirebaseErrorMessage(e.code),
+                            );
+
+                          case 'invalid-email':
+                            showErrorDialog(
+                              context,
+                              message: getFirebaseErrorMessage(e.code),
+                            );
+
+                          case 'network-request-failed':
+                            showNoInternetDialog(context);
+
+                          default:
+                            showErrorDialog(context);
+                        }
                       }
+                      // if (formKey.currentState!.validate()) {
+                      //   await Future.delayed(Duration(seconds: 2), () {
+                      //     isLoading = false;
+                      //     setState(() {});
+                      //   });
+                      //   await PhoneAuth().sendOtp(
+                      //     phone: phoneNumberController.text,
+                      //   );
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) {
+                      //         return OtpScreen();
+                      //       },
+                      //     ),
+                      //   );
+                      // } else {
+                      //   setState(() {
+                      //     autovalidateMode = AutovalidateMode.onUserInteraction;
+                      //   });
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2E7D32),
@@ -228,10 +337,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: Text(
-                      loc.signUp,
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    child: isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            loc.signUp,
+                            style: const TextStyle(color: Colors.white),
+                          ),
                   ),
                 ),
 

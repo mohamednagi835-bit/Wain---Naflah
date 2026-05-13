@@ -44,6 +44,14 @@ dependencies:
   cached_network_image: ^3.4.1
   google_maps_flutter: ^2.17.0
   image_picker: ^1.2.2
+  firebase_auth: ^6.4.0
+  fluttertoast: ^9.0.0
+  pin_code_fields: ^9.3.0
+  cloud_firestore: ^6.3.0
+  http: ^1.6.0
+  flutter_map: ^8.3.0
+  latlong2: ^0.9.1
+  timeago_flutter: ^3.7.0
 
 dev_dependencies:
   flutter_test:

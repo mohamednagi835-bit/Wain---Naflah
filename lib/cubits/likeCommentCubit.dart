@@ -24,6 +24,9 @@ class Likecommentcubit extends Cubit<List<PlaceModel>> {
           likesCount: isLiked ? p.likesCount + 1 : p.likesCount - 1,
           commentCount: p.commentCount,
           comments: p.comments,
+          userName: p.userName,
+          userImage: p.image,
+          createdAt: p.createdAt,
         );
       }
       return p;
@@ -44,6 +47,9 @@ class Likecommentcubit extends Cubit<List<PlaceModel>> {
           likesCount: p.likesCount,
           commentCount: p.commentCount + 1,
           comments: [...p.comments, comment],
+          userName: p.userName,
+          userImage: p.userImage,
+          createdAt: p.createdAt,
         );
       }
       return p;

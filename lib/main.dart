@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 import 'package:tourism_app/Constans.dart';
 import 'package:tourism_app/Screens/splash_screen.dart';
 import 'package:tourism_app/cubits/ChangeLanguagCubit.dart';
@@ -12,6 +13,8 @@ import 'package:tourism_app/l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
+  timeago.setLocaleMessages('en', timeago.EnMessages());
   runApp(
     MultiBlocProvider(
       providers: [
@@ -19,7 +22,7 @@ void main() async {
 
         BlocProvider(create: (_) => Changelanguagcubit()),
 
-        // 👉 Add more cubits here later
+        //  Add more cubits here later
         // BlocProvider(create: (_) => AuthCubit()),
       ],
       child: MyApp(),
