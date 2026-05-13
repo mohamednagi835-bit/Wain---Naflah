@@ -4,6 +4,7 @@ import 'package:tourism_app/Models/comment.dart';
 import 'package:tourism_app/Models/place.dart';
 import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
+import 'package:tourism_app/Widgets/Rating_dialougue.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
@@ -97,7 +98,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   children: [
                     CustomNetworkImage(
                       imageUrl: place.image,
-                      height: 250,
+                      height: 200,
                       width: double.infinity,
                     ),
                     Positioned(
@@ -165,8 +166,54 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         ),
                       ),
 
+                      PopupMenuButton<String>(
+                        color: Colors.white,
+                        icon: Icon(Icons.more_vert, color: Colors.grey[600]),
+
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        onSelected: (value) {
+                          if (value == 'rate') {
+                            /// ⭐ RATE
+                            print("Rate clicked");
+                            showRatingDialog(context);
+                          }
+
+                          if (value == 'favorite') {
+                            /// ❤️ ADD TO FAVORITE
+                            print("Favorite clicked");
+                          }
+                        },
+
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'rate',
+                            child: Row(
+                              children: const [
+                                Icon(Icons.star, color: Colors.amber),
+                                SizedBox(width: 10),
+                                Text("Rate"),
+                              ],
+                            ),
+                          ),
+
+                          PopupMenuItem(
+                            value: 'favorite',
+                            child: Row(
+                              children: const [
+                                Icon(Icons.favorite, color: Colors.red),
+                                SizedBox(width: 10),
+                                Text("Add to favourite"),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
                       /// (optional future)
-                      Icon(Icons.more_vert, color: Colors.grey[600]),
+                      // Icon(Icons.more_vert, color: Colors.grey[600]),
                     ],
                   ),
                 ),

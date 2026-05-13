@@ -103,19 +103,19 @@ class _FeedScreenState extends State<FeedScreen> {
               return GestureDetector(
                 onTap: () async {
                   await getUser();
-                  // await places.add({
-                  //   // add place
-                  //   'title': place.name,
-                  //   'description': place.description,
-                  //   'likesCount': place.likesCount,
-                  //   'commentsCount': place.commentCount,
-                  //   'ratersCount': place.retersNO,
-                  //   'rate': place.rating,
-                  //   'createdAt': place.createdAt,
-                  //   'image': place.image,
-                  //   'userName':
-                  //       currentUser.firsrName + ' ${currentUser.lastName}',
-                  // });
+                  await places.add({
+                    // add place
+                    'title': place.name,
+                    'description': place.description,
+                    'likesCount': place.likesCount,
+                    'commentsCount': place.commentCount,
+                    'ratersCount': place.retersNO,
+                    'rate': place.rating,
+                    'createdAt': place.createdAt,
+                    'image': place.image,
+                    'userName':
+                        currentUser.firsrName + ' ${currentUser.lastName}',
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(
