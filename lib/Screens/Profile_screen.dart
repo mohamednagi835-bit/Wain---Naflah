@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Change_language.dart';
 import 'package:tourism_app/Screens/edit_profile_screen.dart';
-import 'package:tourism_app/Widgets/LogoutDialog.dart';
+import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 

@@ -7,7 +7,7 @@ class Likecommentcubit extends Cubit<List<PlaceModel>> {
   Likecommentcubit() : super([]);
 
   void setplaces() {
-    emit(dummyPlaces);
+    // emit(dummyPlaces);
   }
 
   void onlike(PlaceModel place) {
@@ -25,7 +25,7 @@ class Likecommentcubit extends Cubit<List<PlaceModel>> {
           commentCount: p.commentCount,
           comments: p.comments,
           userName: p.userName,
-          userImage: p.image,
+          // userImage: p.image,
           createdAt: p.createdAt,
         );
       }
@@ -48,7 +48,7 @@ class Likecommentcubit extends Cubit<List<PlaceModel>> {
           commentCount: p.commentCount + 1,
           comments: [...p.comments, comment],
           userName: p.userName,
-          userImage: p.userImage,
+          // userImage: p.userImage,
           createdAt: p.createdAt,
         );
       }

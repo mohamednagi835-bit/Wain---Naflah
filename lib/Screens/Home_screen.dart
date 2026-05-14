@@ -19,6 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
   @override
+  void initState() async {
+    // TODO: implement initState
+    super.initState();
+    await getCurrrentUser();
+  }
+
+  Future<void> getCurrrentUser() async {
+    await getUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 

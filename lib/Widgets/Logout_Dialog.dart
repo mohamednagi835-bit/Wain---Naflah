@@ -71,7 +71,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
 
                         Navigator.pop(context);
 
-                        /// Navigate to login screen
+                        /// Navigate to initial screen
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

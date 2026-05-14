@@ -10,7 +10,7 @@ class PlaceModel {
   int commentCount;
   List<CommentModel> comments;
   String userName;
-  String userImage;
+  // String userImage;
   DateTime createdAt;
   int retersNO;
   final String id;
@@ -25,7 +25,7 @@ class PlaceModel {
     this.commentCount = 0,
     this.comments = const [],
     required this.userName,
-    required this.userImage,
+    // required this.userImage,
     required this.createdAt,
     this.retersNO = 0,
     this.id = '',

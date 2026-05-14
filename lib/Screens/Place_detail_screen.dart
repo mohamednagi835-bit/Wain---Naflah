@@ -4,7 +4,7 @@ import 'package:tourism_app/Models/comment.dart';
 import 'package:tourism_app/Models/place.dart';
 import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
-import 'package:tourism_app/Widgets/Rating_dialougue.dart';
+import 'package:tourism_app/Widgets/Rating_dialog.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
