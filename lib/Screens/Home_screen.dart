@@ -19,15 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
 
   @override
-  void initState() async {
+  void initState() {
     // TODO: implement initState
     super.initState();
-    await getCurrrentUser();
+    getUser();
   }
 
-  Future<void> getCurrrentUser() async {
-    await getUser();
-  }
+  // Future<void> getCurrrentUser() async {
+  //   await getUser();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,6 @@ Future<void> getUser() async {
 
   final email = user?.email;
 
-  print(email);
   final query = await FirebaseFirestore.instance
       .collection('users')
       .where('email', isEqualTo: email)
@@ -98,6 +97,7 @@ Future<void> getUser() async {
   if (query.docs.isEmpty) return;
 
   final doc = query.docs.first.data();
+
   currentUser = AppuUSer(
     email: doc['email'] ?? '',
     paaword: doc['password'] ?? '',
@@ -106,3 +106,26 @@ Future<void> getUser() async {
     phoneNumber: doc['Phone Number'] ?? '',
   );
 }
+// Future<void> getUser() async {
+//   final user = FirebaseAuth.instance.currentUser;
+
+//   final email = user?.email;
+
+//   print(email);
+//   final query = await FirebaseFirestore.instance
+//       .collection('users')
+//       .where('email', isEqualTo: email)
+//       .limit(1)
+//       .get();
+
+//   if (query.docs.isEmpty) return;
+
+//   final doc = query.docs.first.data();
+//   currentUser = AppuUSer(
+//     email: doc['email'] ?? '',
+//     paaword: doc['password'] ?? '',
+//     firsrName: doc['First Name'] ?? '',
+//     lastName: doc['Last Name'] ?? '',
+//     phoneNumber: doc['Phone Number'] ?? '',
+//   );
+// }

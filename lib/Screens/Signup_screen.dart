@@ -257,17 +257,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           'email': emailController.text,
                           'Password': passwordController.text,
                           'Phone Number': phoneNumber,
+                          'id': FirebaseAuth.instance.currentUser!.uid,
                         });
-                        // currentUser = AppuUSer(
-                        //   email: emailController.text,
-                        //   paaword: passwordController.text,
-                        //   firsrName: firstNameController.text,
-                        //   lastName: lastNameController.text,
-                        //   phoneNumber: phoneNumber,
-                        // );
+
                         isLoading = false;
                         setState(() {});
                         showSuccessDialog(context, false);
+
+                        // final query = await FirebaseFirestore.instance
+                        //     .collection('users')
+                        //     .where(
+                        //       'id',
+                        //       isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                        //     )
+                        //     .get();
+                        // if (query.docs.isNotEmpty) {
+                        //   final data = query.docs.first.data();
+                        //   currentUser = AppuUSer(
+                        //     email: data['email'],
+                        //     paaword: data['password'],
+                        //     firsrName: data['First Name'],
+                        //     lastName: data['Last Name'],
+                        //     phoneNumber: data['Phone Number'],
+                        //   );
+                        // }
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return LoginScreen();
+                            },
+                          ),
+                        );
                       } on FirebaseAuthException catch (e) {
                         isLoading = false;
                         setState(() {});

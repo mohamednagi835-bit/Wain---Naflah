@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Change_language.dart';
+import 'package:tourism_app/Screens/Favourite_places.dart';
 import 'package:tourism_app/Screens/edit_profile_screen.dart';
 import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
@@ -122,7 +123,16 @@ class AccountScreen extends StatelessWidget {
                   BuildOption(
                     icon: Icons.place,
                     title: loc.myPlaces,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FeedScreen();
+                          },
+                        ),
+                      );
+                    },
                   ),
 
                   // BuildOption(

@@ -139,20 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       isLoading = true;
                       setState(() {});
-                      // showErrorMessageDialog(
-                      //   context,
-                      //   message: 'Invalid password',
-                      // );
-                      if (formKey.currentState!.validate()) {
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) {
-                        //       return HomeScreen();
-                        //     },
-                        //   ),
-                        // );
 
+                      if (formKey.currentState!.validate()) {
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth

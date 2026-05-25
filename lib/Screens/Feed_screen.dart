@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Models/place.dart';
-import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/Place_detail_screen.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
-import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -19,6 +16,118 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   //List<PlaceModel> places = dummyPlaces;
   CollectionReference places = FirebaseFirestore.instance.collection('places');
+  CollectionReference likedPlaces = FirebaseFirestore.instance.collection(
+    'LikedPlaces',
+  );
+
+  late Stream<QuerySnapshot> placesStream;
+  List<String> placeIDs = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    placesStream = places.snapshots();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getLikedPlaces();
+    });
+  }
+
+  Future<void> getLikedPlaces() async {
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+      final snapshot = await likedPlaces.where('userId', isEqualTo: uid).get();
+
+      final ids = snapshot.docs.map((doc) => doc['place'] as String).toList();
+
+      if (mounted) {
+        setState(() {
+          placeIDs = ids;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error in getLikedPlaces: $e");
+    }
+  }
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   placesStream = places.snapshots();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     getLikedPlaces();
+  //   });
+  // }
+
+  // Future<void> getLikedPlaces() async {
+  //   final uid = FirebaseAuth.instance.currentUser!.uid;
+  //   final snapshot = await likedPlaces.where('userId', isEqualTo: uid).get();
+
+  //   final ids = snapshot.docs.map((doc) => doc['place'] as String).toList();
+
+  //   setState(() {
+  //     placeIDs = ids;
+  //   });
+  // }
+
+  Future<void> toggleLike(PlaceModel place) async {
+    final wasLiked = place.isLiked;
+
+    /// 🔥 1. INSTANT LOCAL UPDATE
+
+    if (wasLiked) {
+      place.likesCount--;
+      placeIDs.remove(place.id);
+    } else {
+      place.likesCount++;
+      placeIDs.add(place.id);
+    }
+
+    // if(wasLiked) {
+    //   placeIDs.remove(place.id)
+
+    // } else {
+    //   placeIDs.add(place.id);
+    // }
+
+    try {
+      /// ❤️ ADD LIKE
+      if (!wasLiked) {
+        await likedPlaces.add({
+          'userId': FirebaseAuth.instance.currentUser!.uid,
+          'place': place.id,
+        });
+      }
+      /// 💔 REMOVE LIKE
+      else {
+        final query = await likedPlaces
+            .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .where('place', isEqualTo: place.id)
+            .get();
+
+        for (var doc in query.docs) {
+          await doc.reference.delete();
+        }
+      }
+
+      /// 🔥 update likes count (server sync)
+      await places.doc(place.id).update({'likesCount': place.likesCount});
+    } catch (e) {
+      /// ❌ ROLLBACK
+      setState(() {
+        if (wasLiked) {
+          placeIDs.add(place.id);
+          place.likesCount++;
+        } else {
+          placeIDs.remove(place.id);
+          place.likesCount--;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,51 +159,10 @@ class _FeedScreenState extends State<FeedScreen> {
             ],
           ),
         ),
-
-        /// 🔘 Actions
-        // actions: [
-        //   PopupMenuButton<String>(
-        //     icon: const Icon(Icons.more_vert, color: Colors.black),
-
-        //     onSelected: (value) {
-        //       switch (value) {
-        //         case 'language':
-        //           // open language dialog
-        //           break;
-
-        //         case 'logout':
-        //           // handle logout
-        //           break;
-
-        //         case 'settings':
-        //           // open settings
-        //           break;
-        //       }
-        //     },
-
-        //     itemBuilder: (context) => [
-
-        //       PopupMenuItem(
-        //         value: 'language',
-        //         child: Text(AppLocalizations.of(context)!.language),
-        //       ),
-        //       PopupMenuItem(
-        //         value: 'settings',
-        //         child: Text(AppLocalizations.of(context)!.settings),
-        //       ),
-        //       PopupMenuItem(
-        //         value: 'logout',
-        //         child: Text(AppLocalizations.of(context)!.logout),
-        //       ),
-        //     ],
-        //   ),
-
-        //   const SizedBox(width: 8),
-        // ],
       ),
 
       body: StreamBuilder<QuerySnapshot>(
-        stream: places.snapshots(),
+        stream: placesStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -112,16 +180,48 @@ class _FeedScreenState extends State<FeedScreen> {
                   name: snapshot.data!.docs[i]['title'],
                   description: snapshot.data!.docs[i]['description'],
                   image: snapshot.data!.docs[i]['image'],
-                  userName: currentUser.firsrName + ' ${currentUser.lastName}',
+                  userName: 'Mohamed Nagy',
                   createdAt: (temp).toDate(),
+                  id: snapshot.data!.docs[i].id,
+                  likesCount: snapshot.data!.docs[i]['likesCount'],
+                  rating: snapshot.data!.docs[i]['rate'],
+                  retersNO: snapshot.data!.docs[i]['ratersCount'],
+                  isLiked: placeIDs.contains(snapshot.data!.docs[i].id),
+                  commentCount: snapshot.data!.docs[i]['commentsCount'],
                 ),
               );
+              //   print(placesList[i].id);
             }
             return ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: placesList.length,
               itemBuilder: (context, index) {
-                return PlaceCard(place: placesList[index], onLike: () {});
+                final place = placesList[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return PlaceDetailsScreen(
+                            place: place,
+                            places: places,
+                            likedPlaces: likedPlaces,
+                            placeIDs: placeIDs,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: PlaceCard(
+                    key: ValueKey(place.id),
+                    place: place,
+                    onLike: () async {
+                      toggleLike(place);
+                    },
+                  ),
+                );
               },
             );
           }

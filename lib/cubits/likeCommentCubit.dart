@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/Models/comment.dart';
 import 'package:tourism_app/Models/place.dart';
-import 'package:tourism_app/Screens/Feed_screen.dart';
 
 class Likecommentcubit extends Cubit<List<PlaceModel>> {
   Likecommentcubit() : super([]);

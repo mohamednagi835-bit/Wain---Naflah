@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Models/place.dart';
 
-Future<void> showRatingDialog(BuildContext context) async {
+Future<void> showRatingDialog(
+  BuildContext context,
+  PlaceModel place,
+  CollectionReference places,
+) async {
   double selectedRating = 0;
 
   showDialog(
@@ -119,6 +125,17 @@ Future<void> showRatingDialog(BuildContext context) async {
                               : () async {
                                   /// 🔥 SAVE RATING HERE
                                   print(selectedRating);
+                                  final total =
+                                      (place.rating * place.retersNO) +
+                                      selectedRating;
+
+                                  final newRatersNo = place.retersNO + 1;
+
+                                  final updatedRating = total / newRatersNo;
+                                  await places.doc(place.id).update({
+                                    'ratersCount': newRatersNo,
+                                    'rate': updatedRating,
+                                  });
 
                                   Navigator.pop(context);
 
