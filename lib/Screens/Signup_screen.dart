@@ -241,7 +241,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
-                      print('printed :$phoneNumber');
                       isLoading = true;
                       setState(() {});
                       try {
@@ -251,7 +250,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: emailController.text,
                               password: passwordController.text,
                             );
-                        await users.add({
+                        showSuccessDialog(context, false);
+                        final uid = userCredential.user!.uid;
+                        await users.doc(uid).set({
                           'First Name': firstNameController.text,
                           'Last Name': lastNameController.text,
                           'email': emailController.text,
@@ -262,7 +263,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         isLoading = false;
                         setState(() {});
-                        showSuccessDialog(context, false);
 
                         // final query = await FirebaseFirestore.instance
                         //     .collection('users')
@@ -282,13 +282,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         //   );
                         // }
 
-                        Navigator.pushReplacement(
+                        Navigator.pushAndRemoveUntil(
                           context,
+
                           MaterialPageRoute(
-                            builder: (context) {
-                              return LoginScreen();
-                            },
+                            builder: (context) => LoginScreen(),
                           ),
+
+                          (route) => false,
                         );
                       } on FirebaseAuthException catch (e) {
                         isLoading = false;

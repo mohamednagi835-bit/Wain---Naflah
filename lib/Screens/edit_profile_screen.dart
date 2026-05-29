@@ -1,4 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Global_variables.dart';
+import 'package:tourism_app/Screens/Initial_page.dart';
+import 'package:tourism_app/Widgets/Error_dialog.dart';
+import 'package:tourism_app/Widgets/Success_dialog.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -12,20 +18,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final formKey = GlobalKey<FormState>();
 
   final TextEditingController firstNameController = TextEditingController(
-    text: "محمد",
+    text: currentUser.firsrName,
   );
   final TextEditingController lastNameController = TextEditingController(
-    text: "ناجي",
+    text: currentUser.lastName,
   );
   final TextEditingController emailController = TextEditingController(
-    text: "example@email.com",
+    text: currentUser.email,
   );
 
-  final TextEditingController paawordController = TextEditingController(
-    text: "Password",
-  );
+  final TextEditingController currentPasswordController =
+      TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  bool isLoading = false;
 
-  String selectedGender = "male";
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser!;
+
+    final credential = EmailAuthProvider.credential(
+      email: user.email!,
+
+      password: currentPassword,
+    );
+
+    /// 🔥 re-login silently
+    await user.reauthenticateWithCredential(credential);
+
+    /// 🔥 update password
+    await user.updatePassword(newPassword);
+    isLoading = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,26 +113,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               /// 🏷️ FIRST NAME
               _buildLabel(loc.firstName),
-              _buildField(lastNameController, loc.firstName),
+              _buildField(hint: loc.firstName, controller: firstNameController),
 
               const SizedBox(height: 16),
 
               /// 🏷️ LAST NAME
               _buildLabel(loc.lastName),
-              _buildField(lastNameController, loc.lastName),
-
-              const SizedBox(height: 16),
+              _buildField(hint: loc.lastName, controller: lastNameController),
 
               /// 🏷️ EMAIL
-              _buildLabel(loc.email),
-              _buildField(emailController, loc.email),
-
               const SizedBox(height: 16),
 
-              _buildLabel(loc.password),
-              _buildField(paawordController, loc.password),
+              _buildLabel('Current password'),
+              _buildField(
+                hint: 'Current password',
+                controller: currentPasswordController,
+              ),
 
               const SizedBox(height: 16),
+              _buildLabel('New Password'),
+              _buildField(
+                hint: 'New password',
+                controller: newPasswordController,
+              ),
 
               /// 🏷️ GENDER
               // _buildLabel(loc.gender),
@@ -137,9 +166,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    isLoading = true;
+                    setState(() {});
                     if (formKey.currentState!.validate()) {
                       // TODO: save to Firebase
+                      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(uid)
+                          .update({
+                            'First Name': firstNameController.text,
+                            'Last Name': lastNameController.text,
+                          });
+
+                      await changePassword(
+                        currentPassword: currentPasswordController.text,
+                        newPassword: newPasswordController.text,
+                      );
+                      await FirebaseAuth.instance.signOut();
+
+                      /// Navigate to initial screen
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => InitialPage()),
+                        (route) => false,
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -148,10 +201,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: Text(
-                    'saves',
-                    style: const TextStyle(color: Colors.white),
-                  ),
+                  child: isLoading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'saves',
+                          style: const TextStyle(color: Colors.white),
+                        ),
                 ),
               ),
             ],
@@ -173,7 +228,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   /// 📝 FIELD
-  Widget _buildField(TextEditingController controller, String hint) {
+  Widget _buildField({
+    required String hint,
+    required TextEditingController controller,
+  }) {
     return TextFormField(
       controller: controller,
       validator: (value) {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Screens/Change_language.dart';
+import 'package:tourism_app/Screens/Edit_options_screen.dart';
 import 'package:tourism_app/Screens/Favourite_places.dart';
+import 'package:tourism_app/Screens/Feed_screen.dart';
 import 'package:tourism_app/Screens/edit_profile_screen.dart';
 import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
@@ -66,16 +69,19 @@ class AccountScreen extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   /// 🏷️ Name
-                  const Text(
-                    "محمد ناجي",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    '${currentUser.firsrName} ${currentUser.lastName}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   const SizedBox(height: 4),
 
                   /// 📧 Email
                   Text(
-                    "example@email.com",
+                    currentUser.email,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
@@ -108,12 +114,11 @@ class AccountScreen extends StatelessWidget {
                     icon: Icons.edit,
                     title: loc.editProfile,
                     onTap: () {
-                      print('Navigation happened');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return EditProfileScreen();
+                            return EditProfileOptionsScreen();
                           },
                         ),
                       );

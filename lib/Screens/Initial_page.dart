@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Screens/Dash_board.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/login_screen.dart';
 
@@ -12,7 +13,7 @@ class InitialPage extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return HomeScreen(); // logged in
+          return AdminDashboardSimple(); // logged in
         } else {
           return LoginScreen(); // not logged in
         }

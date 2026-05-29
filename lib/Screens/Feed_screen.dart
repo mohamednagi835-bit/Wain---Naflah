@@ -80,12 +80,14 @@ class _FeedScreenState extends State<FeedScreen> {
 
     if (wasLiked) {
       place.likesCount--;
+
       placeIDs.remove(place.id);
     } else {
       place.likesCount++;
+
       placeIDs.add(place.id);
     }
-
+    // setState(() {});
     // if(wasLiked) {
     //   placeIDs.remove(place.id)
 

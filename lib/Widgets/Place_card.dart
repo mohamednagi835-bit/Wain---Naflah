@@ -150,7 +150,7 @@ class PlaceCard extends StatelessWidget {
                     GestureDetector(
                       onTap: onLike,
                       child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 150),
+                        duration: Duration(milliseconds: 100),
                         child: Row(
                           children: [
                             Icon(
