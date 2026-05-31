@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tourism_app/Screens/Dash_board.dart';
+import 'package:tourism_app/Screens/Admin_dash_board.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/login_screen.dart';
 
@@ -35,7 +35,7 @@ class InitialPage extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               }
               if (adminSnapshot.data == true) {
-                return AdminDashboardSimple();
+                return AdminDashboard();
               } else {
                 return HomeScreen();
               }

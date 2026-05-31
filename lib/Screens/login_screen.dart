@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Helpers/Handle_error_message.dart';
-import 'package:tourism_app/Screens/Dash_board.dart';
+import 'package:tourism_app/Screens/Admin_dash_board.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/Signup_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
@@ -140,8 +140,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        isLoading = true;
-                        setState(() {});
+                        setState(() {
+                          isLoading = true;
+                        });
+
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth
@@ -149,33 +151,37 @@ class _LoginScreenState extends State<LoginScreen> {
                                 email: emailController.text,
                                 password: passwordController.text,
                               );
+                          //  await Future.delayed(Duration(seconds: 1));
 
-                          isLoading = false;
-                          setState(() {});
-                          final uid = FirebaseAuth.instance.currentUser!.uid;
-                          final doc = await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(uid)
-                              .get();
-                          if (doc['role'] == 'User') {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return HomeScreen();
-                                },
-                              ),
-                            );
-                          } else {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return AdminDashboardSimple();
-                                },
-                              ),
-                            );
-                          }
+                          setState(() {
+                            isLoading = false;
+                          });
+                          //  print('User is: ${FirebaseAuth.instance.currentUser}');
+
+                          // final uid = FirebaseAuth.instance.currentUser!.uid;
+                          // final doc = await FirebaseFirestore.instance
+                          //     .collection('users')
+                          //     .doc(uid)
+                          //     .get();
+                          // if (doc['role'] == 'User') {
+                          //   Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) {
+                          //         return HomeScreen();
+                          //       },
+                          //     ),
+                          //   );
+                          // } else {
+                          //   Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) {
+                          //         return AdminDashboard();
+                          //       },
+                          //     ),
+                          //   );
+                          // }
 
                           showSuccessToast(context, 'Loggined successfully');
                         } on FirebaseAuthException catch (e) {
@@ -220,8 +226,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         }
                       } else {
-                        autovalidateMode = AutovalidateMode.always;
-                        setState(() {});
+                        setState(() {
+                          autovalidateMode = AutovalidateMode.always;
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(

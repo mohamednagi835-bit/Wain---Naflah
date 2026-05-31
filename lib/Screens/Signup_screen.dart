@@ -8,7 +8,6 @@ import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Launguae_dialog.dart';
 import 'package:tourism_app/Widgets/No_internet.dart';
 import 'package:tourism_app/Widgets/Phone_field.dart';
-import 'package:tourism_app/Widgets/Success_dialog.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -250,7 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: emailController.text,
                               password: passwordController.text,
                             );
-                        showSuccessToast(context, 'Loggined successfully');
+                        showSuccessToast(context, 'Signed successfully');
 
                         // showSuccessDialog(context, false);
                         final uid = userCredential.user!.uid;

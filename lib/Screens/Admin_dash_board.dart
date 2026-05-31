@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Admin_places.dart';
 import 'package:tourism_app/Screens/Pending_place.dart';
 import 'package:tourism_app/Screens/User_mangement.dart';
+import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 
-class AdminDashboardSimple extends StatefulWidget {
-  const AdminDashboardSimple({super.key});
+class AdminDashboard extends StatefulWidget {
+  const AdminDashboard({super.key});
 
   @override
-  State<AdminDashboardSimple> createState() => _AdminDashboardSimpleState();
+  State<AdminDashboard> createState() => _AdminDashboardState();
 }
 
-class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
+class _AdminDashboardState extends State<AdminDashboard> {
   int usersCount = 0;
   int placesCount = 0;
   @override
@@ -150,6 +151,16 @@ class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
                         },
                       ),
                     );
+                  },
+                ),
+                const SizedBox(height: 14),
+                controlCard(
+                  title: 'Logout',
+                  subtitle: 'Logout from your account',
+                  icon: Icons.logout,
+                  color: Colors.red,
+                  onTap: () {
+                    showLogoutDialog(context);
                   },
                 ),
               ],
