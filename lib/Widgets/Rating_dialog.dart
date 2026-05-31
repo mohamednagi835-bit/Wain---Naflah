@@ -96,7 +96,7 @@ Future<void> showRatingDialog(
                   /// 🔘 BUTTONS
                   Row(
                     children: [
-                      /// ❌ CANCEL
+                      ///  CANCEL
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
@@ -117,7 +117,7 @@ Future<void> showRatingDialog(
 
                       const SizedBox(width: 12),
 
-                      /// ✅ SUBMIT
+                      ///  SUBMIT
                       Expanded(
                         child: ElevatedButton(
                           onPressed: selectedRating == 0

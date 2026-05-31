@@ -43,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         elevation: 0,
         centerTitle: true,
 
-        /// 🏷️ Title
+        // Title
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -63,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ],
         ),
 
-        /// 🌍 Language Button
+        // Language Button
         actions: [
           IconButton(
             icon: Container(
@@ -92,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                /// 🟢 Logo
+                // Logo
                 CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.white,
@@ -106,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🏷️ Title
+                // Title
                 Text(
                   loc.createAccount,
                   style: const TextStyle(
@@ -117,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 30),
 
-                /// 👤 First Name
+                // First Name
                 CustomTextField(
                   textEditingController: firstNameController,
                   hint: loc.firstName,
@@ -126,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 👤 Last Name
+                // Last Name
                 CustomTextField(
                   textEditingController: lastNameController,
                   hint: loc.lastName,
@@ -135,7 +135,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 📧 Email
+                // Email
                 CustomTextField(
                   textEditingController: emailController,
                   hint: loc.email,
@@ -144,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 15),
 
-                /// 🔑 Password
+                // Password
                 CustomTextField(
                   textEditingController: passwordController,
                   hint: loc.password,
@@ -185,7 +185,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //   label: 'Phone Number',
                 // ),
 
-                /// 🚻 Gender Dropdown
+                // Gender Dropdown
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(horizontal: 8),
                 //   child: Row(
@@ -235,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // ),
                 const SizedBox(height: 25),
 
-                /// 🔘 Sign Up Button
+                // Sign Up Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -250,7 +250,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               email: emailController.text,
                               password: passwordController.text,
                             );
-                        showSuccessDialog(context, false);
+                        showSuccessToast(context, 'Loggined successfully');
+
+                        // showSuccessDialog(context, false);
                         final uid = userCredential.user!.uid;
                         await users.doc(uid).set({
                           'First Name': firstNameController.text,
@@ -259,6 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           'Password': passwordController.text,
                           'Phone Number': phoneNumber,
                           'id': FirebaseAuth.instance.currentUser!.uid,
+                          'role': 'User',
                         });
 
                         isLoading = false;
@@ -364,6 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ? Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
+                              strokeWidth: 4,
                             ),
                           )
                         : Text(
@@ -375,7 +379,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 20),
 
-                /// 🔄 Back to Login
+                // Back to Login
                 GestureDetector(
                   onTap: () {
                     Navigator.pushReplacement(

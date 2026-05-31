@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Helpers/Handle_error_message.dart';
+import 'package:tourism_app/Screens/Dash_board.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/Signup_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
@@ -87,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: CircleAvatar(
                     radius: 90,
                     backgroundColor: Colors.white,
-                    // 👈 gives breathing space
+                    //  gives breathing space
                     child: ClipOval(
                       child: Image.asset(
                         'assets/images/logo.png',
@@ -99,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
 
-                ///  Title
+                //  Title
                 Text(
                   loc.welcomeBack,
                   style: const TextStyle(
@@ -113,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 35),
 
-                ///  Email
+                //  Email
                 CustomTextField(
                   textEditingController: emailController,
                   hint: loc.email,
@@ -131,16 +133,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 25),
 
-                ///  Button
+                // Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
-                      isLoading = true;
-                      setState(() {});
-
                       if (formKey.currentState!.validate()) {
+                        isLoading = true;
+                        setState(() {});
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth
@@ -151,14 +152,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           isLoading = false;
                           setState(() {});
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return HomeScreen();
-                              },
-                            ),
-                          );
+                          final uid = FirebaseAuth.instance.currentUser!.uid;
+                          final doc = await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(uid)
+                              .get();
+                          if (doc['role'] == 'User') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return HomeScreen();
+                                },
+                              ),
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return AdminDashboardSimple();
+                                },
+                              ),
+                            );
+                          }
+
                           showSuccessToast(context, 'Loggined successfully');
                         } on FirebaseAuthException catch (e) {
                           isLoading = false;
@@ -216,6 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
+                              strokeWidth: 4,
                             ),
                           )
                         : Text(

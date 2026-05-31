@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Screens/Initial_page.dart';
-import 'package:tourism_app/Widgets/Error_dialog.dart';
-import 'package:tourism_app/Widgets/Success_dialog.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class EditProfileScreen extends StatefulWidget {

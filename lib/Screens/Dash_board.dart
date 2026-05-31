@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Screens/Admin_places.dart';
 import 'package:tourism_app/Screens/Pending_place.dart';
+import 'package:tourism_app/Screens/User_mangement.dart';
 
 class AdminDashboardSimple extends StatefulWidget {
   const AdminDashboardSimple({super.key});
@@ -27,10 +29,12 @@ class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
     final placesSnapshot = await FirebaseFirestore.instance
         .collection('places')
         .get();
-    setState(() {
-      usersCount = usersSnapshot.docs.length;
-      placesCount = placesSnapshot.docs.length;
-    });
+    if (mounted) {
+      setState(() {
+        usersCount = usersSnapshot.docs.length;
+        placesCount = placesSnapshot.docs.length;
+      });
+    }
   }
 
   @override
@@ -58,9 +62,6 @@ class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-                /// =====================
-                /// TOP STATS (USERS + PLACES)
-                /// =====================
                 Row(
                   children: [
                     Expanded(
@@ -121,7 +122,16 @@ class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
                   subtitle: "View and manage users",
                   icon: Icons.people_outline,
                   color: Colors.blue,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return UsersScreen();
+                        },
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 14),
@@ -131,7 +141,16 @@ class _AdminDashboardSimpleState extends State<AdminDashboardSimple> {
                   subtitle: "Edit or delete places",
                   icon: Icons.place_outlined,
                   color: Colors.green,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AdminPlacesScreen();
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
