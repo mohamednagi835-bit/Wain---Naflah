@@ -14,7 +14,6 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  //List<PlaceModel> places = dummyPlaces;
   CollectionReference places = FirebaseFirestore.instance.collection('places');
   CollectionReference likedPlaces = FirebaseFirestore.instance.collection(
     'LikedPlaces',
@@ -76,7 +75,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> toggleLike(PlaceModel place) async {
     final wasLiked = place.isLiked;
 
-    /// 🔥 1. INSTANT LOCAL UPDATE
+    // INSTANT LOCAL UPDATE
 
     if (wasLiked) {
       place.likesCount--;
@@ -96,14 +95,14 @@ class _FeedScreenState extends State<FeedScreen> {
     // }
 
     try {
-      /// ❤️ ADD LIKE
+      // ADD LIKE
       if (!wasLiked) {
         await likedPlaces.add({
           'userId': FirebaseAuth.instance.currentUser!.uid,
           'place': place.id,
         });
       }
-      /// 💔 REMOVE LIKE
+      // REMOVE LIKE
       else {
         final query = await likedPlaces
             .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -115,10 +114,10 @@ class _FeedScreenState extends State<FeedScreen> {
         }
       }
 
-      /// 🔥 update likes count (server sync)
+      // update likes count (server sync)
       await places.doc(place.id).update({'likesCount': place.likesCount});
     } catch (e) {
-      /// ❌ ROLLBACK
+      // ROLLBACK
       setState(() {
         if (wasLiked) {
           placeIDs.add(place.id);
@@ -186,7 +185,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   createdAt: (temp).toDate(),
                   id: snapshot.data!.docs[i].id,
                   likesCount: snapshot.data!.docs[i]['likesCount'],
-                  rating: snapshot.data!.docs[i]['rate'],
+                  rating: (snapshot.data!.docs[i]['rate'] as num).toDouble(),
                   retersNO: snapshot.data!.docs[i]['ratersCount'],
                   isLiked: placeIDs.contains(snapshot.data!.docs[i].id),
                   commentCount: snapshot.data!.docs[i]['commentsCount'],

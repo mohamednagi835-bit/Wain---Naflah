@@ -42,7 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       password: currentPassword,
     );
 
-    /// 🔥 re-login silently
+    ///  re-login silently
     await user.reauthenticateWithCredential(credential);
 
     /// 🔥 update password

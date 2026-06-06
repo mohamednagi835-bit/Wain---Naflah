@@ -19,7 +19,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /// 🔴 ICON
+                  // ICON
                   CircleAvatar(
                     radius: 28,
                     backgroundColor: Colors.red.withOpacity(0.1),
@@ -32,7 +32,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
 
                   const SizedBox(height: 16),
 
-                  /// 🏷️ TITLE
+                  ///  TITLE
                   const Text(
                     "Logout",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -40,7 +40,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
 
                   const SizedBox(height: 8),
 
-                  /// 📝 MESSAGE
+                  ///  MESSAGE
                   const Text(
                     "Are you sure you want to log out of your account?",
                     textAlign: TextAlign.center,

@@ -6,6 +6,7 @@ AppuUSer currentUser = AppuUSer(
   firsrName: '',
   lastName: '',
   phoneNumber: '',
+  id: '',
 );
 
 String? userName;

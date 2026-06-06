@@ -85,13 +85,13 @@ class PlaceCard extends StatelessWidget {
             child: CustomNetworkImage(imageUrl: place.image),
           ),
 
-          /// 📄 CONTENT
+          ///  CONTENT
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 🏷️ NAME + ⭐ RATING
+                ///  NAME +  RATING
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -143,7 +143,7 @@ class PlaceCard extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-                /// ❤️ ACTIONS
+                ///  ACTIONS
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

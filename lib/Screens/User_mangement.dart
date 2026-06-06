@@ -1,8 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tourism_app/Models/user.dart';
 import 'package:tourism_app/Widgets/Show_delete_user_dialogue.dart';
 
-class UsersScreen extends StatelessWidget {
+class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
+
+  @override
+  State<UsersScreen> createState() => _UsersScreenState();
+}
+
+class _UsersScreenState extends State<UsersScreen> {
+  late Stream<QuerySnapshot> usersStream;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    usersStream = FirebaseFirestore.instance.collection('users').snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +34,44 @@ class UsersScreen extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
 
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: 10,
+      body: StreamBuilder(
+        stream: usersStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: Center(child: CircularProgressIndicator()));
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No users yet.'));
+          } else if (snapshot.hasError) {
+            return Center(child: Text('There is an error'));
+          }
+          List<AppuUSer> users = [];
+          for (int i = 0; i < snapshot.data!.size; i++) {
+            users.add(
+              AppuUSer(
+                email: snapshot.data!.docs[i]['email'],
+                paaword: snapshot.data!.docs[i]['Password'],
+                firsrName: snapshot.data!.docs[i]['First Name'],
+                lastName: snapshot.data!.docs[i]['Last Name'],
+                phoneNumber: snapshot.data!.docs[i]['Phone Number'],
+                id: snapshot.data!.docs[i].id,
+              ),
+            );
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: users.length,
 
-        itemBuilder: (context, index) {
-          return userCard(context);
+            itemBuilder: (context, index) {
+              String fullName =
+                  '${users[index].firsrName} ${users[index].lastName}';
+              return userCard(
+                context: context,
+                email: users[index].email,
+                userName: fullName,
+                id: users[index].id,
+              );
+            },
+          );
         },
       ),
     );
@@ -32,7 +80,12 @@ class UsersScreen extends StatelessWidget {
   /// =========================
   /// USER CARD
   /// =========================
-  Widget userCard(BuildContext context) {
+  Widget userCard({
+    required BuildContext context,
+    required String email,
+    required String userName,
+    required String id,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
 
@@ -54,25 +107,25 @@ class UsersScreen extends StatelessWidget {
 
       child: Row(
         children: [
-          /// Avatar
+          // Avatar
           const CircleAvatar(radius: 26, child: Icon(Icons.person)),
 
           const SizedBox(width: 14),
 
-          /// NAME + EMAIL
+          // NAME + EMAIL
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
 
-              children: const [
+              children: [
                 Text(
-                  'User Name',
+                  userName,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: 4),
 
-                Text('user@email.com', style: TextStyle(color: Colors.grey)),
+                Text(email, style: TextStyle(color: Colors.grey)),
               ],
             ),
           ),
@@ -81,7 +134,7 @@ class UsersScreen extends StatelessWidget {
           IconButton(
             onPressed: () {
               /// DELETE USER ACTION
-              showDeleteUserDialog(context: context, onConfirm: () {});
+              showDeleteUserDialog(context: context, id: id);
             },
 
             icon: const Icon(Icons.delete, color: Colors.red),

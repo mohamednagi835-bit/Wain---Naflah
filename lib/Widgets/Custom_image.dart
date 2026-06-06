@@ -18,12 +18,12 @@ class CustomNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+      imageUrl: imageUrl,
       height: height,
       width: width,
       fit: fit,
 
-      /// 🟡 Loading
+      // Loading
       placeholder: (context, url) => Container(
         height: height,
         width: width,
@@ -31,7 +31,7 @@ class CustomNetworkImage extends StatelessWidget {
         child: const Center(child: CircularProgressIndicator()),
       ),
 
-      /// 🔴 Error fallback
+      // Error fallback
       errorWidget: (context, url, error) => Container(
         height: height,
         width: width,

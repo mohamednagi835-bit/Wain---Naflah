@@ -4,6 +4,7 @@ class AppuUSer {
   String firsrName;
   String lastName;
   String phoneNumber;
+  String id;
 
   AppuUSer({
     required this.email,
@@ -11,5 +12,6 @@ class AppuUSer {
     required this.firsrName,
     required this.lastName,
     required this.phoneNumber,
+    required this.id,
   });
 }

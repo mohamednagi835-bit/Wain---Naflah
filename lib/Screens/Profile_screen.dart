@@ -7,8 +7,19 @@ import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +57,14 @@ class AccountScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            /// 👤 PROFILE HEADER
+            ///  PROFILE HEADER
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
               decoration: const BoxDecoration(color: Colors.white),
               child: Column(
                 children: [
-                  /// 🧑 Avatar
+                  ///  Avatar
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.green.shade100,

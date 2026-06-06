@@ -24,27 +24,29 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return FutureBuilder<bool>(
-            future: isAdmin(),
-            builder: (context, adminSnapshot) {
-              if (!adminSnapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (adminSnapshot.data == true) {
-                return AdminDashboard();
-              } else {
-                return HomeScreen();
-              }
-            },
-          );
-        } else {
-          return LoginScreen(); // not logged in
-        }
-      },
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return FutureBuilder<bool>(
+              future: isAdmin(),
+              builder: (context, adminSnapshot) {
+                if (!adminSnapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (adminSnapshot.data == true) {
+                  return AdminDashboard();
+                } else {
+                  return HomeScreen();
+                }
+              },
+            );
+          } else {
+            return LoginScreen(); // not logged in
+          }
+        },
+      ),
     );
   }
 }

@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Helpers/Handle_error_message.dart';
-import 'package:tourism_app/Screens/Admin_dash_board.dart';
-import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/Signup_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
 import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Launguae_dialog.dart';
 import 'package:tourism_app/Widgets/No_internet.dart';
+import 'package:tourism_app/Widgets/Show_success_toast.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -139,11 +137,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
+                      if (!mounted) return;
+                      setState(() {
+                        isLoading = true;
+                      });
                       if (formKey.currentState!.validate()) {
-                        setState(() {
-                          isLoading = true;
-                        });
-
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth
@@ -153,9 +151,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                           //  await Future.delayed(Duration(seconds: 1));
 
-                          setState(() {
-                            isLoading = false;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } else {
+                            return;
+                          }
+
                           //  print('User is: ${FirebaseAuth.instance.currentUser}');
 
                           // final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -183,9 +186,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           //   );
                           // }
 
-                          showSuccessToast(context, 'Loggined successfully');
+                          if (mounted) {
+                            showSuccessToast(context, 'Loggined successfully');
+                          } else {
+                            return;
+                          }
                         } on FirebaseAuthException catch (e) {
                           isLoading = false;
+                          if (!mounted) return;
                           setState(() {});
                           switch (e.code) {
                             case 'user-not-found':
@@ -311,45 +319,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
-
-void showSuccessToast(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      duration: const Duration(seconds: 2),
-
-      content: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF2E7D32), // professional green
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10),
-          ],
-        ),
-        child: Row(
-          children: [
-            /// ✅ ICON
-            const Icon(Icons.check_circle, color: Colors.white),
-
-            const SizedBox(width: 10),
-
-            /// 📝 TEXT
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }

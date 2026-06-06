@@ -8,6 +8,7 @@ import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Launguae_dialog.dart';
 import 'package:tourism_app/Widgets/No_internet.dart';
 import 'package:tourism_app/Widgets/Phone_field.dart';
+import 'package:tourism_app/Widgets/Show_success_toast.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {

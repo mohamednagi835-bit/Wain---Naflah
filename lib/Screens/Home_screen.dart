@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Models/user.dart';
+import 'package:tourism_app/Screens/Add_place_screen.dart';
 import 'package:tourism_app/Screens/Feed_screen.dart';
-import 'package:tourism_app/Screens/Map_screen.dart';
 import 'package:tourism_app/Screens/Profile_screen.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    final screens = [FeedScreen(), MapScreen(), AccountScreen()];
+    final screens = [FeedScreen(), AddPlaceScreen(), AccountScreen()];
 
     return Scaffold(
       body: screens[currentIndex],
@@ -84,26 +84,23 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Future<void> getUser() async {
-  final user = FirebaseAuth.instance.currentUser;
+  final uid = FirebaseAuth.instance.currentUser!.uid;
 
-  final email = user?.email;
-
-  final query = await FirebaseFirestore.instance
+  final doc = await FirebaseFirestore.instance
       .collection('users')
-      .where('email', isEqualTo: email)
-      .limit(1)
+      .doc(uid)
       .get();
 
-  if (query.docs.isEmpty) return;
-
-  final doc = query.docs.first.data();
+  if (!doc.exists) return;
+  print(doc['email']);
 
   currentUser = AppuUSer(
     email: doc['email'] ?? '',
-    paaword: doc['password'] ?? '',
+    paaword: doc['Password'] ?? '',
     firsrName: doc['First Name'] ?? '',
     lastName: doc['Last Name'] ?? '',
     phoneNumber: doc['Phone Number'] ?? '',
+    id: doc.id,
   );
 }
 // Future<void> getUser() async {
