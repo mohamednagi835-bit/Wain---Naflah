@@ -139,7 +139,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
           return SafeArea(
             child: Column(
               children: [
-                /// 📸 IMAGE + BACK
+                /// IMAGE + BACK
                 Stack(
                   children: [
                     CustomNetworkImage(
@@ -222,7 +222,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
                         onSelected: (value) async {
                           if (value == 'rate') {
-                            /// ⭐ RATE
+                            ///  RATE
                             print("Rate clicked");
                             showRatingDialog(
                               context,
@@ -232,7 +232,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                           }
 
                           if (value == 'favorite') {
-                            /// ❤️ ADD TO FAVORITE
+                            ///  ADD TO FAVORITE
                             await favouritePlacses.add({
                               'userid': FirebaseAuth.instance.currentUser!.uid,
                               'place': widget.place.id,

@@ -83,7 +83,7 @@ Future<void> showLogoutDialog(BuildContext context) async {
                             await FirebaseAuth.instance.signOut();
                             isLoading = false;
                             setState(() {});
-
+                            if (!context.mounted) return;
                             Navigator.pop(context);
 
                             Navigator.pushAndRemoveUntil(

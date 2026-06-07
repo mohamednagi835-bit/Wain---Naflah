@@ -112,11 +112,6 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                     child: const Icon(Icons.person, color: Colors.green),
                   ),
 
-                  // CircleAvatar(
-                  //   radius: 20,
-                  //   backgroundColor: Colors.grey.shade200,
-                  //   backgroundImage: NetworkImage(place.userImage),
-                  // ),
                   const SizedBox(width: 10),
 
                   ///  Name + Time
@@ -145,6 +140,21 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                       ],
                     ),
                   ),
+                  PopupMenuButton<String>(
+                    color: Colors.white,
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                        PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                      ];
+                    },
+                    onSelected: (value) {
+                      if (value == 'Edit') {}
+                      if (value == 'Delete') {
+                        showDeletePlaceDialog(context: context, id: place.id);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -152,11 +162,12 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
             ///  IMAGE
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(0),
-                bottom: Radius.circular(0),
+                top: Radius.circular(5),
+                bottom: Radius.circular(5),
               ),
               child: CustomNetworkImage(imageUrl: place.image),
             ),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -214,25 +225,24 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 14),
+
             // ACTIONS
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
                   onTap: () {},
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 100),
-                    child: Row(
-                      children: [
-                        Icon(
-                          //  place.isLiked
-                          Icons.favorite,
-                          color: Colors.red,
-                        ),
-                        const SizedBox(width: 5),
-                        Text('${place.likesCount}'),
-                      ],
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        //  place.isLiked
+                        Icons.favorite,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(width: 5),
+                      Text('${place.likesCount}'),
+                    ],
                   ),
                 ),
 
@@ -251,59 +261,59 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
             const SizedBox(height: 14),
 
             /// ACTIONS (EDIT / DELETE)
-            Row(
-              children: [
-                /// EDIT
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      //padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+            // Row(
+            //   children: [
+            //     /// EDIT
+            //     Expanded(
+            //       child: ElevatedButton.icon(
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: Colors.green,
+            //           //padding: const EdgeInsets.symmetric(vertical: 12),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(12),
+            //           ),
+            //         ),
 
-                    onPressed: () {
-                      /// EDIT PLACE
-                    },
+            //         onPressed: () {
+            //           /// EDIT PLACE
+            //         },
 
-                    icon: const Icon(Icons.edit, color: Colors.white),
-                    label: const Text(
-                      'Edit',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+            //         icon: const Icon(Icons.edit, color: Colors.white),
+            //         label: const Text(
+            //           'Edit',
+            //           style: TextStyle(color: Colors.white),
+            //         ),
+            //       ),
+            //     ),
 
-                const SizedBox(width: 12),
+            //     const SizedBox(width: 12),
 
-                /// DELETE
-                Expanded(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      //padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+            //     /// DELETE
+            //     Expanded(
+            //       child: ElevatedButton.icon(
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: Colors.red,
+            //           //padding: const EdgeInsets.symmetric(vertical: 12),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(12),
+            //           ),
+            //         ),
 
-                    onPressed: () {
-                      /// DELETE PLACE
+            //         onPressed: () {
+            //           /// DELETE PLACE
 
-                      showDeletePlaceDialog(context: context, onConfirm: () {});
-                    },
+            //           showDeletePlaceDialog(context: context, onConfirm: () {});
+            //         },
 
-                    icon: const Icon(Icons.delete, color: Colors.white),
-                    label: const Text(
-                      'Delete',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            //         icon: const Icon(Icons.delete, color: Colors.white),
+            //         label: const Text(
+            //           'Delete',
+            //           style: TextStyle(color: Colors.white),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
