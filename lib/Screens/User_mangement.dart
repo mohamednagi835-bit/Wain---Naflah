@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Models/user.dart';
+import 'package:tourism_app/Widgets/Show_delete_place_dialogue.dart';
 import 'package:tourism_app/Widgets/Show_delete_user_dialogue.dart';
+import 'package:tourism_app/Widgets/Show_success_toast.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -54,6 +56,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 lastName: snapshot.data!.docs[i]['Last Name'],
                 phoneNumber: snapshot.data!.docs[i]['Phone Number'],
                 id: snapshot.data!.docs[i].id,
+                role: snapshot.data!.docs[i]['role'],
               ),
             );
           }
@@ -69,6 +72,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 email: users[index].email,
                 userName: fullName,
                 id: users[index].id,
+                role: users[index].role,
               );
             },
           );
@@ -85,6 +89,7 @@ class _UsersScreenState extends State<UsersScreen> {
     required String email,
     required String userName,
     required String id,
+    required String role,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -105,39 +110,131 @@ class _UsersScreenState extends State<UsersScreen> {
         ],
       ),
 
-      child: Row(
+      child: Column(
         children: [
-          // Avatar
-          const CircleAvatar(radius: 26, child: Icon(Icons.person)),
+          Row(
+            children: [
+              // Avatar
+              const CircleAvatar(radius: 26, child: Icon(Icons.person)),
 
-          const SizedBox(width: 14),
+              const SizedBox(width: 14),
 
-          // NAME + EMAIL
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // NAME + EMAIL
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-              children: [
-                Text(
-                  userName,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  children: [
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Text(email, style: const TextStyle(color: Colors.grey)),
+
+                    const SizedBox(height: 8),
+
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: role == 'Admin'
+                            ? Colors.orange.withOpacity(.12)
+                            : Colors.blue.withOpacity(.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            role == 'Admin'
+                                ? Icons.admin_panel_settings
+                                : Icons.person,
+                            size: 14,
+                            color: role == 'Admin'
+                                ? Colors.orange.shade800
+                                : Colors.blue.shade800,
+                          ),
+
+                          const SizedBox(width: 4),
+
+                          Text(
+                            role,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: role == 'Admin'
+                                  ? Colors.orange.shade800
+                                  : Colors.blue.shade800,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
+              ),
 
-                SizedBox(height: 4),
+              /// DELETE BUTTON
+              // IconButton(
+              //   onPressed: () {
+              //     /// DELETE USER ACTION
+              //     showDeleteUserDialog(context: context, id: id);
+              //   },
 
-                Text(email, style: TextStyle(color: Colors.grey)),
-              ],
-            ),
-          ),
+              //   icon: const Icon(Icons.delete, color: Colors.red),
+              // ),
+              PopupMenuButton<String>(
+                color: Colors.white,
+                icon: const Icon(Icons.more_horiz, color: Colors.black87),
 
-          /// DELETE BUTTON
-          IconButton(
-            onPressed: () {
-              /// DELETE USER ACTION
-              showDeleteUserDialog(context: context, id: id);
-            },
-
-            icon: const Icon(Icons.delete, color: Colors.red),
+                itemBuilder: (context) {
+                  if (role == 'User') {
+                    return [
+                      PopupMenuItem(
+                        value: 'Promotion',
+                        child: Text('Promote to admin'),
+                      ),
+                      PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                    ];
+                  } else {
+                    return [
+                      PopupMenuItem(
+                        value: 'Downgrade',
+                        child: Text('Downgrade to user'),
+                      ),
+                      PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                    ];
+                  }
+                },
+                onSelected: (value) async {
+                  if (value == 'Promotion') {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(id)
+                        .update({'role': 'Admin'});
+                    if (!context.mounted) return;
+                    showSuccessToast(context, 'User promoted successfully');
+                  } else if (value == 'Downgrade') {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(id)
+                        .update({'role': 'User'});
+                    if (!context.mounted) return;
+                    showSuccessToast(context, 'User Downgraded successfully');
+                  } else if (value == 'Delete') {
+                    //   showDeletePlaceDialog(context: context, id: place.id);
+                  }
+                },
+              ),
+            ],
           ),
         ],
       ),

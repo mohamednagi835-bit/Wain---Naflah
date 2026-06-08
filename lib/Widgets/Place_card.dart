@@ -133,7 +133,7 @@ class PlaceCard extends StatelessWidget {
 
                 const SizedBox(height: 6),
 
-                /// 📝 DESCRIPTION
+                ///  DESCRIPTION
                 Text(
                   place.description,
                   maxLines: 2,
@@ -142,6 +142,54 @@ class PlaceCard extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 10),
+
+                /// CATEGORY
+                Row(
+                  children: [
+                    Icon(
+                      Icons.local_offer_outlined,
+                      size: 18,
+                      color: Colors.green.shade700,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        place.category,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 6),
+
+                /// LOCATION
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 18,
+                      color: Colors.red.shade400,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        place.location,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
 
                 ///  ACTIONS
                 Row(

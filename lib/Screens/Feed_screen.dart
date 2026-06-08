@@ -26,8 +26,10 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     super.initState();
 
-    placesStream = places.snapshots();
-
+    placesStream = FirebaseFirestore.instance
+        .collection('places')
+        .where('isApproved', isEqualTo: 'True')
+        .snapshots();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getLikedPlaces();
     });
@@ -189,6 +191,10 @@ class _FeedScreenState extends State<FeedScreen> {
                   retersNO: snapshot.data!.docs[i]['ratersCount'],
                   isLiked: placeIDs.contains(snapshot.data!.docs[i].id),
                   commentCount: snapshot.data!.docs[i]['commentsCount'],
+                  location: snapshot.data!.docs[i]['location'],
+                  category: snapshot.data!.docs[i]['category'],
+                  lat: (snapshot.data!.docs[i]['latitude'] as num).toDouble(),
+                  lon: (snapshot.data!.docs[i]['longitude'] as num).toDouble(),
                 ),
               );
               //   print(placesList[i].id);

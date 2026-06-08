@@ -10,30 +10,37 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tourism_app/Global_variables.dart';
+import 'package:tourism_app/Models/place.dart';
 import 'package:tourism_app/Screens/Map_screen.dart';
 import 'package:tourism_app/Widgets/Map_preview.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
 
-class AddPlaceScreen extends StatefulWidget {
-  const AddPlaceScreen({super.key});
+class EditPlaceScreen extends StatefulWidget {
+  final PlaceModel place;
+
+  EditPlaceScreen({super.key, required this.place});
 
   @override
-  State<AddPlaceScreen> createState() => _AddPlaceScreenState();
+  State<EditPlaceScreen> createState() => _AddPlaceScreenState();
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
-  LatLng selectedLocation = LatLng(24.7136, 46.6753);
+class _AddPlaceScreenState extends State<EditPlaceScreen> {
+  late LatLng selectedLocation;
   List<dynamic> suggestions = [];
   Timer? debounce;
   File? selectedImage;
   final ImagePicker picker = ImagePicker();
-  TextEditingController titleControler = TextEditingController();
-  TextEditingController describtionController = TextEditingController();
+  late TextEditingController titleControler;
+  late TextEditingController describtionController;
+  late TextEditingController searchController;
+
   String placeCategory = '';
   double lat = 0.0;
   double lon = 0.0;
   String placeLocation = '';
   bool isLoading = false;
+  late String image;
+  bool isImageEdited = false;
 
   String summarizePlaceName(String text) {
     return text.split(',').first.trim();
@@ -47,6 +54,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     setState(() {
       selectedImage = File(image.path);
     });
+    isImageEdited = true;
   }
 
   Future<void> searchPlace(String query) async {
@@ -81,8 +89,24 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedLocation = LatLng(widget.place.lat, widget.place.lon);
+    titleControler = TextEditingController(text: widget.place.name);
+    describtionController = TextEditingController(
+      text: widget.place.description,
+    );
+    placeCategory = widget.place.category;
+    placeLocation = widget.place.location;
+    image = widget.place.image;
+    searchController = TextEditingController(text: widget.place.location);
+  }
+
+  @override
   Widget build(BuildContext context) {
     print('enterd build method');
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
 
@@ -96,7 +120,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Add  place',
+                'Edit  place',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -105,7 +129,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                'Add place you have discovered',
+                'Edit place user discovered',
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
@@ -194,6 +218,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                 decoration: const InputDecoration(border: InputBorder.none),
 
                 hint: const Text('Choose category'),
+                initialValue: placeCategory,
 
                 items: const [
                   DropdownMenuItem(value: 'Mountain', child: Text('Mountain')),
@@ -244,29 +269,29 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   border: Border.all(color: Colors.grey.shade300),
                 ),
 
-                child: selectedImage == null
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: [
-                          Icon(
-                            Icons.image_outlined,
-                            size: 55,
-                            color: Colors.grey.shade500,
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          Text(
-                            'Choose Image',
-                            style: TextStyle(color: Colors.grey.shade700),
-                          ),
-                        ],
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.file(selectedImage!, fit: BoxFit.cover),
-                      ),
+                child:
+                    // selectedImage == null
+                    //     ? Column(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           Icon(
+                    //             Icons.image_outlined,
+                    //             size: 55,
+                    //             color: Colors.grey.shade500,
+                    //           ),
+                    //           const SizedBox(height: 10),
+                    //           Text(
+                    //             'Choose Image',
+                    //             style: TextStyle(color: Colors.grey.shade700),
+                    //           ),
+                    //         ],
+                    //       )
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: isImageEdited
+                          ? Image.file(selectedImage!)
+                          : Image.network(image),
+                    ),
               ),
             ),
 
@@ -283,6 +308,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             const SizedBox(height: 8),
 
             TextField(
+              controller: searchController,
               onChanged: (value) {
                 debounce?.cancel();
                 debounce = Timer(Duration(milliseconds: 500), () {
@@ -394,28 +420,24 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   await storageRef.putFile(selectedImage!);
 
                   final imageUrl = await storageRef.getDownloadURL();
-                  await FirebaseFirestore.instance.collection('places').add({
-                    'title': titleControler.text,
-                    'description': describtionController.text,
-                    'createdAt': DateTime.now(),
-                    'commentsCount': 0,
-                    'likesCount': 0,
-                    'rate': 0,
-                    'ratersCount': 0,
-                    'userName':
-                        '${currentUser.firsrName} ${currentUser.lastName}',
-                    'image': imageUrl,
-                    'isApproved': 'False',
-                    'latitude': lat,
-                    'longitude': lon,
-                    'location': placeLocation,
-                    'category': placeCategory,
-                  });
+                  await FirebaseFirestore.instance
+                      .collection('places')
+                      .doc(widget.place.id)
+                      .update({
+                        'title': titleControler.text,
+                        'description': describtionController.text,
+                        'image': isImageEdited ? imageUrl : image,
+                        'latitude': lat,
+                        'longitude': lon,
+                        'location': placeLocation,
+                        'category': placeCategory,
+                      });
                   if (mounted) {
                     setState(() {
                       isLoading = false;
                     });
-                    showSuccessToast(context, 'Place added successfully');
+                    if (!context.mounted) return;
+                    showSuccessToast(context, 'Place edited successfully');
                   } else {
                     return;
                   }

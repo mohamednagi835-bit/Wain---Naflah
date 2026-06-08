@@ -14,7 +14,10 @@ class PlaceModel {
   DateTime createdAt;
   int retersNO;
   final String id;
-
+  double lat;
+  double lon;
+  String category;
+  String location;
   PlaceModel({
     required this.name,
     required this.description,
@@ -29,5 +32,9 @@ class PlaceModel {
     required this.createdAt,
     this.retersNO = 0,
     this.id = '',
+    this.lat = 0.0,
+    this.lon = 0.0,
+    this.category = '',
+    this.location = '',
   });
 }

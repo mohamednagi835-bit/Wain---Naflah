@@ -5,6 +5,7 @@ class AppuUSer {
   String lastName;
   String phoneNumber;
   String id;
+  String role;
 
   AppuUSer({
     required this.email,
@@ -13,5 +14,6 @@ class AppuUSer {
     required this.lastName,
     required this.phoneNumber,
     required this.id,
+    this.role = 'User',
   });
 }

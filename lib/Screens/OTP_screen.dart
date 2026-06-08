@@ -35,7 +35,7 @@ class _OtpScreenState extends State<OtpScreen> {
       if (_seconds == 0) {
         timer.cancel();
         setState(() {
-          _isCounting = false; // 🔥 switch to "Resend"
+          _isCounting = false; //  switch to "Resend"
         });
       } else {
         setState(() {
@@ -75,7 +75,7 @@ class _OtpScreenState extends State<OtpScreen> {
       return;
     }
 
-    // 🔥 connect this to Firebase later
+    //  connect this to Firebase later
     print("OTP: ${_controller.text}");
     if (await PhoneAuth().verifyOtp(_controller.text)) {
       print('Succcccccesssssssssss');
@@ -112,7 +112,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   children: [
                     const SizedBox(height: 20),
 
-                    /// 📩 Formal message
+                    ///  Formal message
                     const Text(
                       "To verify your account, a one-time verification code will be sent to your registered mobile number. Please enter the code below once received.",
                       textAlign: TextAlign.center,
@@ -121,7 +121,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     const SizedBox(height: 40),
 
-                    /// 🔢 OTP boxes
+                    ///  OTP boxes
                     _buildOtpField(),
 
                     const SizedBox(height: 20),
@@ -142,7 +142,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     const Spacer(),
 
-                    /// ✅ Verify Button
+                    ///  Verify Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -156,7 +156,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     const SizedBox(height: 10),
 
-                    /// ❌ Cancel Button
+                    ///  Cancel Button
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
@@ -174,7 +174,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  /// 🔢 Custom OTP UI (6 boxes)
+  ///  Custom OTP UI (6 boxes)
   Widget _buildOtpField() {
     return Stack(
       alignment: Alignment.center,
@@ -195,7 +195,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
         /// Visible Boxes
         Row(
-          textDirection: TextDirection.ltr, // ✅ VERY IMPORTANT
+          textDirection: TextDirection.ltr, //  VERY IMPORTANT
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(6, (index) {
             String char = "";
@@ -228,7 +228,7 @@ class _OtpScreenState extends State<OtpScreen> {
             )
           : TextButton(
               onPressed: () {
-                // 🔥 here later you will call Firebase resend
+                //  here later you will call Firebase resend
                 _startTimer(); // restart cycle
               },
               child: const Text("Resend Code"),

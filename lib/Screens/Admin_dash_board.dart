@@ -109,7 +109,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return PendingPlacesScreen();
+                          return PendingPlace();
                         },
                       ),
                     );

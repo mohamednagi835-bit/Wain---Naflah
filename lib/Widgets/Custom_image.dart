@@ -19,7 +19,7 @@ class CustomNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
-      height: height,
+      height: 180,
       width: width,
       fit: fit,
 
@@ -41,7 +41,7 @@ class CustomNetworkImage extends StatelessWidget {
         ),
       ),
 
-      /// ✨ Smooth fade
+      ///  Smooth fade
       fadeInDuration: const Duration(milliseconds: 300),
     );
   }

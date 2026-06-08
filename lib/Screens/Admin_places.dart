@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Models/place.dart';
+import 'package:tourism_app/Screens/Edit_place_screen.dart';
 import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
 import 'package:tourism_app/Widgets/Show_delete_place_dialogue.dart';
@@ -61,6 +62,10 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                   rating: (snapshot.data!.docs[i]['rate'] as num).toDouble(),
                   retersNO: snapshot.data!.docs[i]['ratersCount'],
                   commentCount: snapshot.data!.docs[i]['commentsCount'],
+                  lat: (snapshot.data!.docs[i]['latitude'] as num).toDouble(),
+                  lon: (snapshot.data!.docs[i]['longitude'] as num).toDouble(),
+                  category: snapshot.data!.docs[i]['category'],
+                  location: snapshot.data!.docs[i]['location'],
                 ),
               );
               //   print(placesList[i].id);
@@ -149,7 +154,16 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                       ];
                     },
                     onSelected: (value) {
-                      if (value == 'Edit') {}
+                      if (value == 'Edit') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EditPlaceScreen(place: place);
+                            },
+                          ),
+                        );
+                      }
                       if (value == 'Delete') {
                         showDeletePlaceDialog(context: context, id: place.id);
                       }
@@ -218,10 +232,43 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
 
             Row(
               children: [
-                Icon(Icons.location_on, color: Colors.grey),
-                Text(
-                  'مكة المكرمة',
-                  style: TextStyle(fontSize: 12, color: Colors.black),
+                Icon(
+                  Icons.local_offer_outlined,
+                  size: 18,
+                  color: Colors.green.shade700,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    place.category,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 6),
+
+            /// LOCATION
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 18,
+                  color: Colors.red.shade400,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    place.location,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                  ),
                 ),
               ],
             ),
@@ -237,8 +284,8 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                     children: [
                       Icon(
                         //  place.isLiked
-                        Icons.favorite,
-                        color: Colors.red,
+                        Icons.favorite_border_outlined,
+                        color: Colors.grey,
                       ),
                       const SizedBox(width: 5),
                       Text('${place.likesCount}'),
