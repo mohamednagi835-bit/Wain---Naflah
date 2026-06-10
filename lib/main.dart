@@ -6,6 +6,7 @@ import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 import 'package:tourism_app/Constans.dart';
 import 'package:tourism_app/Screens/splash_screen.dart';
 import 'package:tourism_app/cubits/ChangeLanguagCubit.dart';
+import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/firebase_options.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
@@ -18,8 +19,7 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => Likecommentcubit()..setplaces()),
-
+        // BlocProvider(create: (_) => Likecommentcubit()..setplaces()),
         BlocProvider(create: (_) => Changelanguagcubit()),
 
         //  Add more cubits here later
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Cairo',
 
-            /// 🌿 Main brand color
+            ///  Main brand color
             primaryColor: primaryColor,
 
             colorScheme: ColorScheme.fromSeed(
@@ -60,14 +60,14 @@ class MyApp extends StatelessWidget {
               primary: primaryColor,
             ),
 
-            /// ✍️ Cursor + selection colors
+            ///  Cursor + selection colors
             textSelectionTheme: const TextSelectionThemeData(
               cursorColor: primaryColor,
               selectionColor: Color(0x552E7D32), // light green highlight
               selectionHandleColor: primaryColor,
             ),
 
-            /// ✏️ Input fields theme (VERY IMPORTANT)
+            ///  Input fields theme (VERY IMPORTANT)
             inputDecorationTheme: const InputDecorationTheme(
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: primaryColor),
@@ -78,12 +78,12 @@ class MyApp extends StatelessWidget {
               floatingLabelStyle: TextStyle(color: primaryColor),
             ),
 
-            /// ⏳ Optional consistency (loading indicators)
+            ///  Optional consistency (loading indicators)
             progressIndicatorTheme: const ProgressIndicatorThemeData(
               color: primaryColor,
             ),
 
-            /// 🔘 Optional buttons consistency
+            ///  Optional buttons consistency
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
             ),

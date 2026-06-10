@@ -213,8 +213,8 @@ class _FeedScreenState extends State<FeedScreen> {
                         builder: (context) {
                           return PlaceDetailsScreen(
                             place: place,
-                            places: places,
-                            likedPlaces: likedPlaces,
+                            //   places: places,
+                            //   likedPlaces: likedPlaces,
                             placeIDs: placeIDs,
                           );
                         },

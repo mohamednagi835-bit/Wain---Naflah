@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tourism_app/Models/comment.dart';
 
 class PlaceModel {
@@ -37,4 +38,25 @@ class PlaceModel {
     this.category = '',
     this.location = '',
   });
+
+  factory PlaceModel.fromFirestore(doc) {
+    Timestamp temp = doc['createdAt'];
+    return PlaceModel(
+      name: doc['title'],
+      description: doc['description'],
+      image: doc['image'],
+      userName: doc['userName'],
+      createdAt: temp.toDate(),
+      id: doc.id,
+      likesCount: doc['likesCount'],
+      rating: (doc['rate'] as num).toDouble(),
+      retersNO: doc['ratersCount'],
+      commentCount: doc['commentsCount'],
+      location: doc['location'],
+      category: doc['category'],
+      lat: (doc['latitude'] as num).toDouble(),
+      lon: (doc['longitude'] as num).toDouble(),
+      //  isLiked: placesIds.contains(doc.id),
+    );
+  }
 }

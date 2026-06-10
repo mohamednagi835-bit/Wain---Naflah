@@ -12,15 +12,15 @@ import 'package:tourism_app/l10n/app_localizations.dart';
 
 class PlaceDetailsScreen extends StatefulWidget {
   final PlaceModel place;
-  CollectionReference places;
-  CollectionReference likedPlaces;
+  // CollectionReference places;
+  // CollectionReference likedPlaces;
   List<String> placeIDs;
 
   PlaceDetailsScreen({
     super.key,
     required this.place,
-    required this.places,
-    required this.likedPlaces,
+    // required this.places,
+    // required this.likedPlaces,
     required this.placeIDs,
   });
 
@@ -48,7 +48,10 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     commentStream = comments
         .where('place', isEqualTo: widget.place.id)
         .snapshots();
-    ratingStream = widget.places.doc(widget.place.id).snapshots();
+    ratingStream = FirebaseFirestore.instance
+        .collection('places')
+        .doc(widget.place.id)
+        .snapshots();
   }
 
   @override
@@ -58,7 +61,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
-      /// 📌 FIX: input moved here to avoid overflow
+      ///  FIX: input moved here to avoid overflow
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
           left: 12,
@@ -106,9 +109,10 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                     'place': widget.place.id,
                     'user': '${currentUser.firsrName} ${currentUser.lastName}',
                   });
-                  await widget.places.doc(widget.place.id).update({
-                    'commentsCount': commentsModels.length,
-                  });
+                  await FirebaseFirestore.instance
+                      .collection('places')
+                      .doc(widget.place.id)
+                      .update({'commentsCount': commentsModels.length});
                   commentController.clear();
                 },
 
@@ -224,11 +228,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                           if (value == 'rate') {
                             ///  RATE
                             print("Rate clicked");
-                            showRatingDialog(
-                              context,
-                              widget.place,
-                              widget.places,
-                            );
+                            showRatingDialog(context, widget.place);
                           }
 
                           if (value == 'favorite') {
@@ -341,19 +341,23 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                     // }
 
                                     try {
-                                      /// ❤️ ADD LIKE
+                                      ///  ADD LIKE
                                       if (!wasLiked) {
-                                        await widget.likedPlaces.add({
-                                          'userId': FirebaseAuth
-                                              .instance
-                                              .currentUser!
-                                              .uid,
-                                          'place': widget.place.id,
-                                        });
+                                        await FirebaseFirestore.instance
+                                            .collection('liked places')
+                                            .add({
+                                              'userId': FirebaseAuth
+                                                  .instance
+                                                  .currentUser!
+                                                  .uid,
+                                              'place': widget.place.id,
+                                            });
                                       }
                                       /// 💔 REMOVE LIKE
                                       else {
-                                        final query = await widget.likedPlaces
+                                        final query = await FirebaseFirestore
+                                            .instance
+                                            .collection('liked places')
                                             .where(
                                               'userId',
                                               isEqualTo: FirebaseAuth
@@ -372,15 +376,16 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                         }
                                       }
 
-                                      /// 🔥 update likes count (server sync)
-                                      await widget.places
+                                      ///  update likes count (server sync)
+                                      await FirebaseFirestore.instance
+                                          .collection('places')
                                           .doc(widget.place.id)
                                           .update({
                                             'likesCount':
                                                 widget.place.likesCount,
                                           });
                                     } catch (e) {
-                                      /// ❌ ROLLBACK
+                                      ///  ROLLBACK
                                       setState(() {
                                         if (wasLiked) {
                                           widget.placeIDs.add(widget.place.id);

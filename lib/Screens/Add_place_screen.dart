@@ -319,7 +319,6 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
 
                 itemBuilder: (context, index) {
                   final placeData = suggestions[index];
-
                   return ListTile(
                     leading: Icon(Icons.location_on),
                     title: Text(placeData['display_name']),

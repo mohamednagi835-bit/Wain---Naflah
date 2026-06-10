@@ -26,7 +26,7 @@ class _LanguageScreenState extends State<ChangeLanguage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
 
-      /// 🏷️ AppBar
+      ///  AppBar
       appBar: AppBar(
         title: Text(
           loc.language,
@@ -37,12 +37,12 @@ class _LanguageScreenState extends State<ChangeLanguage> {
         elevation: 0,
       ),
 
-      /// 📄 Body
+      ///  Body
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// 🌍 OPTIONS
+            ///  OPTIONS
             _buildOption(title: "English", subtitle: "الإنجليزية", value: "en"),
 
             const SizedBox(height: 12),
@@ -51,7 +51,7 @@ class _LanguageScreenState extends State<ChangeLanguage> {
 
             const Spacer(),
 
-            /// 💾 SAVE BUTTON
+            ///  SAVE BUTTON
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -79,13 +79,13 @@ class _LanguageScreenState extends State<ChangeLanguage> {
     );
   }
 
-  /// 🌍 OPTION TILE
+  ///  OPTION TILE
   Widget _buildOption({
     required String title,
     required String subtitle,
     required String value,
   }) {
-    final isSelected = selectedLang == value;
+    final isSelected = (selectedLang == value);
 
     return GestureDetector(
       onTap: () {

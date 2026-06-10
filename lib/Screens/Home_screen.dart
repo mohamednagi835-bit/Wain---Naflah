@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Models/user.dart';
 import 'package:tourism_app/Screens/Add_place_screen.dart';
 import 'package:tourism_app/Screens/Feed_screen.dart';
+import 'package:tourism_app/Screens/Feed_screen_test.dart';
 import 'package:tourism_app/Screens/Profile_screen.dart';
+import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    final screens = [FeedScreen(), AddPlaceScreen(), AccountScreen()];
+    final screens = [FeedScreenTest(), AddPlaceScreen(), AccountScreen()];
 
     return Scaffold(
       body: screens[currentIndex],
