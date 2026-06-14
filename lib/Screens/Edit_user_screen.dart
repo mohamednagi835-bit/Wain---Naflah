@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Initial_page.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class EditUsernameScreen extends StatefulWidget {
   const EditUsernameScreen({super.key});
@@ -19,6 +20,8 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
@@ -27,9 +30,13 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
 
-        title: const Text(
-          'Edit Username',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          loc.editUsername,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
 
         iconTheme: const IconThemeData(color: Colors.black),
@@ -45,15 +52,15 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
             const SizedBox(height: 20),
 
             /// HEADER
-            const Text(
-              'Update Your Name',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            Text(
+              loc.updateYourName,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
             Text(
-              'Make sure your information is accurate.',
+              loc.makeSureYourInformationIsAccurate,
               style: TextStyle(color: Colors.grey[600], fontSize: 16),
             ),
 
@@ -62,7 +69,7 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
             /// FIRST NAME
             customTextField(
               controller: firstNameController,
-              label: 'First Name',
+              label: '${loc.enter} ${loc.firstName}',
               // icon: Icons.person_outline,
             ),
 
@@ -71,7 +78,7 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
             /// LAST NAME
             customTextField(
               controller: lastNameController,
-              label: 'Last Name',
+              label: '${loc.enter} ${loc.lastName}',
               //  icon: Icons.badge_outlined,
             ),
 
@@ -84,13 +91,10 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
 
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-
+                  backgroundColor: const Color(0xFF2E7D32),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-
-                  elevation: 0,
                 ),
 
                 onPressed: () async {
@@ -127,7 +131,7 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
 
-                        content: const Text('Username updated successfully'),
+                        content: Text(loc.usernameUpdatedSuccessfully),
                       ),
                     );
                   }
@@ -152,13 +156,9 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
                           strokeWidth: 2.5,
                         ),
                       )
-                    : const Text(
-                        'Save Changes',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    : Text(
+                        loc.saveChanges,
+                        style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
               ),
             ),
@@ -213,7 +213,7 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
 
             decoration: InputDecoration(
-              hintText: 'Enter $label',
+              hintText: label,
 
               hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15),
 

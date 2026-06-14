@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/Screens/Initial_page.dart';
+import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       );
     });
 
-    /// ⛔ AUTH / NAVIGATION LOGIC (COMMENTED FOR NOW)
+    ///  AUTH / NAVIGATION LOGIC (COMMENTED FOR NOW)
 
     /*
     if (AuthService.currentUser == null) {
@@ -36,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     */
 
-    /// ✅ UI ONLY MODE → do nothing for now
+    ///  UI ONLY MODE → do nothing for now
   }
 
   @override
@@ -47,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            /// 🌿 Artistic Logo Container
+            ///  Artistic Logo Container
             // Container(
             //     width: 120,
             //     height: 120,
@@ -72,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: CircleAvatar(
                 radius: 90,
                 backgroundColor: Colors.white,
-                // 👈 gives breathing space
+                //  gives breathing space
                 child: ClipOval(
                   child: Image.asset(
                     'assets/images/logo.png',
@@ -117,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
             // ),
             const SizedBox(height: 40),
 
-            /// ⏳ Loading Indicator (light style)
+            ///  Loading Indicator (light style)
             const CircularProgressIndicator(
               color: Color(0xFF2E7D32),
               strokeWidth: 2.5,

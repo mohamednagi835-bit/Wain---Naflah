@@ -7,6 +7,7 @@ import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
 import 'package:tourism_app/Widgets/Reject_place.dart';
 import 'package:tourism_app/Widgets/Show_delete_place_dialogue.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class PendingPlace extends StatefulWidget {
   const PendingPlace({super.key});
@@ -16,6 +17,40 @@ class PendingPlace extends StatefulWidget {
 }
 
 class _AdminPlacesScreenState extends State<PendingPlace> {
+  final enCategories = [
+    'All',
+    'Mountain',
+    'Sea',
+    'Beach',
+    'Entertainment',
+    'Historical',
+    'Desert',
+    'Otherwise',
+  ];
+  final arCategories = [
+    'الكل',
+    'جبل',
+    'بحر',
+    'شاطئ',
+    'ترفيه',
+    'تاريخي',
+    'صحراء',
+    'أخرى',
+  ];
+  String getCategory(String category, String languageCode) {
+    int i;
+    for (i = 0; i < enCategories.length; i++) {
+      if (category == enCategories[i]) {
+        break;
+      }
+    }
+    if (languageCode == 'en') {
+      return enCategories[i];
+    } else {
+      return arCategories[i];
+    }
+  }
+
   late Stream<QuerySnapshot> placesStream;
   @override
   void initState() {
@@ -29,12 +64,15 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
       appBar: AppBar(
-        title: const Text(
-          'Pending Places',
+        title: Text(
+          loc.pendingPlaces,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -47,9 +85,9 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No places yet.'));
+            return Center(child: Text(loc.noPlacesYet));
           } else if (snapshot.hasError) {
-            return Center(child: Text('There is an error'));
+            return Center(child: Text(loc.thereIsAnError));
           } else {
             List<PlaceModel> placesList = [];
             Timestamp temp;
@@ -80,7 +118,11 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
               itemCount: placesList.length,
 
               itemBuilder: (context, index) {
-                return placeCard(context: context, place: placesList[index]);
+                return placeCard(
+                  context: context,
+                  place: placesList[index],
+                  loc: loc,
+                );
               },
             );
           }
@@ -92,7 +134,12 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
   /// =========================
   /// PLACE CARD
   /// =========================
-  Widget placeCard({required BuildContext context, required PlaceModel place}) {
+  Widget placeCard({
+    required BuildContext context,
+    required PlaceModel place,
+    required AppLocalizations loc,
+  }) {
+    final localeCode = Localizations.localeOf(context).languageCode;
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
@@ -154,8 +201,11 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
                     color: Colors.white,
                     itemBuilder: (context) {
                       return [
-                        PopupMenuItem(value: 'Approve', child: Text('Approve')),
-                        PopupMenuItem(value: 'Reject', child: Text('Reject')),
+                        PopupMenuItem(
+                          value: 'Approve',
+                          child: Text(loc.approve),
+                        ),
+                        PopupMenuItem(value: 'Reject', child: Text(loc.reject)),
                       ];
                     },
                     onSelected: (value) {
@@ -238,7 +288,7 @@ class _AdminPlacesScreenState extends State<PendingPlace> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    place.category,
+                    getCategory(place.category, localeCode),
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey.shade700,

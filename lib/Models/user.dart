@@ -6,6 +6,7 @@ class AppuUSer {
   String phoneNumber;
   String id;
   String role;
+  String isBlocked;
 
   AppuUSer({
     required this.email,
@@ -15,5 +16,6 @@ class AppuUSer {
     required this.phoneNumber,
     required this.id,
     this.role = 'User',
+    this.isBlocked = 'False',
   });
 }

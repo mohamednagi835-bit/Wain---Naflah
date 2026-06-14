@@ -5,6 +5,7 @@ import 'package:tourism_app/Screens/Edit_place_screen.dart';
 import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
 import 'package:tourism_app/Widgets/Show_delete_place_dialogue.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class AdminPlacesScreen extends StatefulWidget {
   const AdminPlacesScreen({super.key});
@@ -24,12 +25,14 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
       appBar: AppBar(
-        title: const Text(
-          'Places',
+        title: Text(
+          loc.places,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -42,9 +45,9 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No places yet.'));
+            return Center(child: Text(loc.noPlacesYet));
           } else if (snapshot.hasError) {
-            return Center(child: Text('There is an error'));
+            return Center(child: Text(loc.thereIsAnError));
           } else {
             List<PlaceModel> placesList = [];
             Timestamp temp;
@@ -87,7 +90,44 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
   /// =========================
   /// PLACE CARD
   /// =========================
+  ///
   Widget placeCard({required BuildContext context, required PlaceModel place}) {
+    final loc = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final enCategories = [
+      'All',
+      'Mountain',
+      'Sea',
+      'Beach',
+      'Entertainment',
+      'Historical',
+      'Desert',
+      'Otherwise',
+    ];
+    final arCategories = [
+      'الكل',
+      'جبل',
+      'بحر',
+      'شاطئ',
+      'ترفيه',
+      'تاريخي',
+      'صحراء',
+      'أخرى',
+    ];
+    String getCategory(String category, String languageCode) {
+      int i;
+      for (i = 0; i < enCategories.length; i++) {
+        if (category == enCategories[i]) {
+          break;
+        }
+      }
+      if (languageCode == 'en') {
+        return enCategories[i];
+      } else {
+        return arCategories[i];
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
@@ -149,8 +189,8 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                     color: Colors.white,
                     itemBuilder: (context) {
                       return [
-                        PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                        PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                        PopupMenuItem(value: 'Edit', child: Text(loc.edit)),
+                        PopupMenuItem(value: 'Delete', child: Text(loc.delete)),
                       ];
                     },
                     onSelected: (value) {
@@ -240,7 +280,7 @@ class _AdminPlacesScreenState extends State<AdminPlacesScreen> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    place.category,
+                    getCategory(place.category, localeCode),
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey.shade700,

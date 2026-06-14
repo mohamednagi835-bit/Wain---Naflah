@@ -24,7 +24,7 @@ void showSuccessToast(BuildContext context, String message) {
 
             const SizedBox(width: 10),
 
-            /// 📝 TEXT
+            ///  TEXT
             Expanded(
               child: Text(
                 message,

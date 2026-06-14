@@ -245,11 +245,11 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get home;
 
-  /// No description provided for @map.
+  /// No description provided for @addPlace.
   ///
   /// In en, this message translates to:
-  /// **'Map'**
-  String get map;
+  /// **'Add Place'**
+  String get addPlace;
 
   /// No description provided for @profile.
   ///
@@ -332,7 +332,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPlaces.
   ///
   /// In en, this message translates to:
-  /// **'My places'**
+  /// **'Favourite Places'**
   String get myPlaces;
 
   /// No description provided for @editProfile.
@@ -364,6 +364,636 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Phone Number'**
   String get phoneNumber;
+
+  /// No description provided for @enterPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get enterPhone;
+
+  /// No description provided for @enterFullCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the complete code'**
+  String get enterFullCode;
+
+  /// No description provided for @vreificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To verify your account, a one-time verification code will be sent to your registered mobile number. Please enter the code below once received.'**
+  String get vreificationMessage;
+
+  /// No description provided for @somethingWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWrong;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @placeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Place Title'**
+  String get placeTitle;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @placeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Place Image'**
+  String get placeImage;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @submitPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Place'**
+  String get submitPlace;
+
+  /// No description provided for @accountSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Settings'**
+  String get accountSettings;
+
+  /// No description provided for @manageYourAccountInformationSecurely.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your account information securely'**
+  String get manageYourAccountInformationSecurely;
+
+  /// No description provided for @editUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Username'**
+  String get editUsername;
+
+  /// No description provided for @changeYourFirstAndLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Change your first and last name'**
+  String get changeYourFirstAndLastName;
+
+  /// No description provided for @editPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Password'**
+  String get editPassword;
+
+  /// No description provided for @updateYourAccountPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account password'**
+  String get updateYourAccountPassword;
+
+  /// No description provided for @updateYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Your Name'**
+  String get updateYourName;
+
+  /// No description provided for @makeSureYourInformationIsAccurate.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure your information is accurate'**
+  String get makeSureYourInformationIsAccurate;
+
+  /// No description provided for @usernameUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Username updated successfully'**
+  String get usernameUpdatedSuccessfully;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @securitySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Security Settings'**
+  String get securitySettings;
+
+  /// No description provided for @chooseAStrongPasswordToKeepYourAccountSecure.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a strong password to keep your account secure'**
+  String get chooseAStrongPasswordToKeepYourAccountSecure;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated successfully'**
+  String get passwordUpdatedSuccessfully;
+
+  /// No description provided for @updatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Password'**
+  String get updatePassword;
+
+  /// No description provided for @discoverYourBestPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover your best places'**
+  String get discoverYourBestPlaces;
+
+  /// No description provided for @placeAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Place added successfully'**
+  String get placeAddedSuccessfully;
+
+  /// No description provided for @enterPlaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter place title'**
+  String get enterPlaceTitle;
+
+  /// No description provided for @addPlaceYouHaveDiscovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Add place you have discovered'**
+  String get addPlaceYouHaveDiscovered;
+
+  /// No description provided for @writePlaceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Write place description...'**
+  String get writePlaceDescription;
+
+  /// No description provided for @chooseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose category'**
+  String get chooseCategory;
+
+  /// No description provided for @mountain.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain'**
+  String get mountain;
+
+  /// No description provided for @sea.
+  ///
+  /// In en, this message translates to:
+  /// **'Sea'**
+  String get sea;
+
+  /// No description provided for @beach.
+  ///
+  /// In en, this message translates to:
+  /// **'Beach'**
+  String get beach;
+
+  /// No description provided for @entertainment.
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get entertainment;
+
+  /// No description provided for @historical.
+  ///
+  /// In en, this message translates to:
+  /// **'Historical'**
+  String get historical;
+
+  /// No description provided for @desert.
+  ///
+  /// In en, this message translates to:
+  /// **'Desert'**
+  String get desert;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @chooseImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Image'**
+  String get chooseImage;
+
+  /// No description provided for @searchLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Search location...'**
+  String get searchLocation;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @enter.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter'**
+  String get enter;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate'**
+  String get rate;
+
+  /// No description provided for @addToFavourite.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourite'**
+  String get addToFavourite;
+
+  /// No description provided for @rateThisPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate this place'**
+  String get rateThisPlace;
+
+  /// No description provided for @yourFeedbackHelpsOtherTravelers.
+  ///
+  /// In en, this message translates to:
+  /// **'Your feedback helps other travelers'**
+  String get yourFeedbackHelpsOtherTravelers;
+
+  /// No description provided for @tapToRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to rate'**
+  String get tapToRate;
+
+  /// No description provided for @thanksForYourRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your rating'**
+  String get thanksForYourRating;
+
+  /// No description provided for @addedToFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favourites'**
+  String get addedToFavourites;
+
+  /// No description provided for @youCanFindItLaterInSavedPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'You can find it later in saved places'**
+  String get youCanFindItLaterInSavedPlaces;
+
+  /// No description provided for @confirmLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out of your account?'**
+  String get confirmLogout;
+
+  /// No description provided for @adminDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Dashboard'**
+  String get adminDashboard;
+
+  /// No description provided for @management.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get management;
+
+  /// No description provided for @users.
+  ///
+  /// In en, this message translates to:
+  /// **'Users'**
+  String get users;
+
+  /// No description provided for @pendingPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Places'**
+  String get pendingPlaces;
+
+  /// No description provided for @approveOrRejectNewPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve or reject new places'**
+  String get approveOrRejectNewPlaces;
+
+  /// No description provided for @viewAndManageUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'View and manage users'**
+  String get viewAndManageUsers;
+
+  /// No description provided for @editOrDeletePlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit or delete places'**
+  String get editOrDeletePlaces;
+
+  /// No description provided for @logoutFromYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout from your account'**
+  String get logoutFromYourAccount;
+
+  /// No description provided for @noPlacesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No places yet'**
+  String get noPlacesYet;
+
+  /// No description provided for @thereIsAnError.
+  ///
+  /// In en, this message translates to:
+  /// **'There is an error'**
+  String get thereIsAnError;
+
+  /// No description provided for @approve.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approve;
+
+  /// No description provided for @reject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reject;
+
+  /// No description provided for @approvePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve Place'**
+  String get approvePlace;
+
+  /// No description provided for @approvePlaceConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to approve this place? It will become visible to users in the application.'**
+  String get approvePlaceConfirmation;
+
+  /// No description provided for @placeApprovedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Place approved successfully'**
+  String get placeApprovedSuccessfully;
+
+  /// No description provided for @rejectPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Place'**
+  String get rejectPlace;
+
+  /// No description provided for @rejectPlaceConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this place? The place will not be published in the application.'**
+  String get rejectPlaceConfirmation;
+
+  /// No description provided for @placeRejectedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Place rejected successfully'**
+  String get placeRejectedSuccessfully;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deletePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Place?'**
+  String get deletePlace;
+
+  /// No description provided for @deletePlaceConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this place? This action cannot be undone.'**
+  String get deletePlaceConfirmation;
+
+  /// No description provided for @placeDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Place deleted successfully'**
+  String get placeDeletedSuccessfully;
+
+  /// No description provided for @noUsersYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No users yet'**
+  String get noUsersYet;
+
+  /// No description provided for @promoteToAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Promote to admin'**
+  String get promoteToAdmin;
+
+  /// No description provided for @downgradeToUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Downgrade to user'**
+  String get downgradeToUser;
+
+  /// No description provided for @userPromotedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'User promoted successfully'**
+  String get userPromotedSuccessfully;
+
+  /// No description provided for @userDowngradedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'User downgraded successfully'**
+  String get userDowngradedSuccessfully;
+
+  /// No description provided for @admin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get admin;
+
+  /// No description provided for @editPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Place'**
+  String get editPlace;
+
+  /// No description provided for @editPlaceYouDiscovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit the place user discovered'**
+  String get editPlaceYouDiscovered;
+
+  /// No description provided for @placeEditedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Place edited successfully'**
+  String get placeEditedSuccessfully;
+
+  /// No description provided for @blockUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Block User?'**
+  String get blockUser;
+
+  /// No description provided for @blockUserConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to block this user?'**
+  String get blockUserConfirmation;
+
+  /// No description provided for @unblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get unblock;
+
+  /// No description provided for @block.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get block;
+
+  /// No description provided for @blockedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked successfully'**
+  String get blockedSuccessfully;
+
+  /// No description provided for @unblockedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblocked successfully'**
+  String get unblockedSuccessfully;
+
+  /// No description provided for @loggedInSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in successfully'**
+  String get loggedInSuccessfully;
+
+  /// No description provided for @noAccountFoundWithThisEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this email'**
+  String get noAccountFoundWithThisEmail;
+
+  /// No description provided for @incorrectPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get incorrectPassword;
+
+  /// No description provided for @emailAlreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered'**
+  String get emailAlreadyRegistered;
+
+  /// No description provided for @passwordTooWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak'**
+  String get passwordTooWeak;
+
+  /// No description provided for @invalidEmailFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get invalidEmailFormat;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again'**
+  String get somethingWentWrong;
+
+  /// No description provided for @checkInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again'**
+  String get checkInternetConnection;
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Please try again'**
+  String get loginFailed;
+
+  /// No description provided for @removeFromFavourite.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourite'**
+  String get removeFromFavourite;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

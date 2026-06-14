@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 void showNoInternetDialog(BuildContext context) {
   showDialog(
     context: context,
     barrierDismissible: false, // must press OK
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
+
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
@@ -13,7 +16,6 @@ void showNoInternetDialog(BuildContext context) {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              /// 📡 Icon
               Container(
                 decoration: BoxDecoration(
                   color: Colors.red.withOpacity(0.1),
@@ -26,15 +28,15 @@ void showNoInternetDialog(BuildContext context) {
               const SizedBox(height: 20),
 
               /// Title
-              const Text(
-                "No Internet Connection",
+              Text(
+                loc.noInternetConnection,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 10),
 
               /// Message
-              const Text(
+              Text(
                 "Please check your internet connection.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, color: Colors.black),
@@ -42,7 +44,7 @@ void showNoInternetDialog(BuildContext context) {
 
               const SizedBox(height: 25),
 
-              /// 🔘 OK Button
+              ///  OK Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -56,10 +58,7 @@ void showNoInternetDialog(BuildContext context) {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    "OK",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text(loc.ok, style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],

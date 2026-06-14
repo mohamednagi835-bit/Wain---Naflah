@@ -9,4 +9,4 @@ AppuUSer currentUser = AppuUSer(
   id: '',
 );
 
-String? userName;
+List<String> likedPlacesIds = [];

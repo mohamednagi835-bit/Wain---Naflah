@@ -4,6 +4,7 @@ import 'package:tourism_app/Models/user.dart';
 import 'package:tourism_app/Widgets/Show_delete_place_dialogue.dart';
 import 'package:tourism_app/Widgets/Show_delete_user_dialogue.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -24,12 +25,14 @@ class _UsersScreenState extends State<UsersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
       appBar: AppBar(
-        title: const Text(
-          'Users',
+        title: Text(
+          loc.users,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -42,9 +45,9 @@ class _UsersScreenState extends State<UsersScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: Center(child: CircularProgressIndicator()));
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No users yet.'));
+            return Center(child: Text(loc.noUsersYet));
           } else if (snapshot.hasError) {
-            return Center(child: Text('There is an error'));
+            return Center(child: Text(loc.thereIsAnError));
           }
           List<AppuUSer> users = [];
           for (int i = 0; i < snapshot.data!.size; i++) {
@@ -57,6 +60,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 phoneNumber: snapshot.data!.docs[i]['Phone Number'],
                 id: snapshot.data!.docs[i].id,
                 role: snapshot.data!.docs[i]['role'],
+                isBlocked: snapshot.data!.docs[i]['isBlocked'],
               ),
             );
           }
@@ -73,6 +77,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 userName: fullName,
                 id: users[index].id,
                 role: users[index].role,
+                isBlocked: users[index].isBlocked,
               );
             },
           );
@@ -90,7 +95,11 @@ class _UsersScreenState extends State<UsersScreen> {
     required String userName,
     required String id,
     required String role,
+    required String isBlocked,
   }) {
+    final loc = AppLocalizations.of(context)!;
+    final localeCode = Localizations.localeOf(context).languageCode;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
 
@@ -166,7 +175,7 @@ class _UsersScreenState extends State<UsersScreen> {
                           const SizedBox(width: 4),
 
                           Text(
-                            role,
+                            getRole(role, localeCode),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -196,21 +205,29 @@ class _UsersScreenState extends State<UsersScreen> {
                 icon: const Icon(Icons.more_horiz, color: Colors.black87),
 
                 itemBuilder: (context) {
-                  if (role == 'User') {
+                  if (role == 'User' && isBlocked == 'False') {
                     return [
                       PopupMenuItem(
                         value: 'Promotion',
-                        child: Text('Promote to admin'),
+                        child: Text(loc.promoteToAdmin),
                       ),
-                      PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                      PopupMenuItem(value: 'Block', child: Text(loc.block)),
+                    ];
+                  } else if (role == 'User' && isBlocked == 'True') {
+                    return [
+                      PopupMenuItem(
+                        value: 'Promotion',
+                        child: Text(loc.promoteToAdmin),
+                      ),
+                      PopupMenuItem(value: 'Unblock', child: Text(loc.unblock)),
                     ];
                   } else {
                     return [
                       PopupMenuItem(
                         value: 'Downgrade',
-                        child: Text('Downgrade to user'),
+                        child: Text(loc.downgradeToUser),
                       ),
-                      PopupMenuItem(value: 'Delete', child: Text('Delete')),
+                      //  PopupMenuItem(value: 'Block', child: Text(loc.delete)),
                     ];
                   }
                 },
@@ -221,16 +238,23 @@ class _UsersScreenState extends State<UsersScreen> {
                         .doc(id)
                         .update({'role': 'Admin'});
                     if (!context.mounted) return;
-                    showSuccessToast(context, 'User promoted successfully');
+                    showSuccessToast(context, loc.userPromotedSuccessfully);
                   } else if (value == 'Downgrade') {
                     await FirebaseFirestore.instance
                         .collection('users')
                         .doc(id)
                         .update({'role': 'User'});
                     if (!context.mounted) return;
-                    showSuccessToast(context, 'User Downgraded successfully');
-                  } else if (value == 'Delete') {
-                    //   showDeletePlaceDialog(context: context, id: place.id);
+                    showSuccessToast(context, loc.userDowngradedSuccessfully);
+                  } else if (value == 'Block') {
+                    showDeleteUserDialog(context: context, id: id);
+                  } else if (value == 'Unblock') {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(id)
+                        .update({'isBlocked': 'False'});
+                    if (!context.mounted) return;
+                    showSuccessToast(context, loc.unblockedSuccessfully);
                   }
                 },
               ),
@@ -239,5 +263,22 @@ class _UsersScreenState extends State<UsersScreen> {
         ],
       ),
     );
+  }
+
+  List<String> enRoles = ['Admin', 'User'];
+  List<String> arRoles = ['مسؤول', 'مستخدم'];
+
+  String getRole(String role, String languageCode) {
+    int i;
+    for (i = 0; i < enRoles.length; i++) {
+      if (role == enRoles[i]) {
+        break;
+      }
+    }
+    if (languageCode == 'en') {
+      return enRoles[i];
+    } else {
+      return arRoles[i];
+    }
   }
 }

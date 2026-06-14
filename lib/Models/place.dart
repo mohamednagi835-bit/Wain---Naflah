@@ -50,7 +50,7 @@ class PlaceModel {
       id: doc.id,
       likesCount: doc['likesCount'],
       rating: (doc['rate'] as num).toDouble(),
-      retersNO: doc['ratersCount'],
+      retersNO: (doc['ratersCount'] as num).toInt(),
       commentCount: doc['commentsCount'],
       location: doc['location'],
       category: doc['category'],

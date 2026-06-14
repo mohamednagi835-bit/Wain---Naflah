@@ -45,7 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     ///  re-login silently
     await user.reauthenticateWithCredential(credential);
 
-    /// 🔥 update password
+    ///  update password
     await user.updatePassword(newPassword);
     isLoading = false;
     setState(() {});
@@ -109,17 +109,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               const SizedBox(height: 30),
 
-              /// 🏷️ FIRST NAME
+              ///  FIRST NAME
               _buildLabel(loc.firstName),
               _buildField(hint: loc.firstName, controller: firstNameController),
 
               const SizedBox(height: 16),
 
-              /// 🏷️ LAST NAME
+              ///  LAST NAME
               _buildLabel(loc.lastName),
               _buildField(hint: loc.lastName, controller: lastNameController),
 
-              /// 🏷️ EMAIL
+              ///  EMAIL
               const SizedBox(height: 16),
 
               _buildLabel('Current password'),

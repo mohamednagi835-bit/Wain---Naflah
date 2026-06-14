@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 Future<void> showDeletePlaceDialog({
   required BuildContext context,
   required String id,
 }) async {
   bool isLoading = false;
+  final loc = AppLocalizations.of(context)!;
+
   return showDialog(
     context: context,
     builder: (context) {
@@ -17,14 +20,12 @@ Future<void> showDeletePlaceDialog({
               borderRadius: BorderRadius.circular(16),
             ),
 
-            title: const Text(
-              'Delete Place?',
+            title: Text(
+              loc.deletePlace,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
-            content: const Text(
-              'Are you sure you want to delete this place? This action cannot be undone.',
-            ),
+            content: Text(loc.deletePlaceConfirmation),
 
             actions: [
               /// CANCEL
@@ -32,10 +33,7 @@ Future<void> showDeletePlaceDialog({
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.black),
-                ),
+                child: Text(loc.cancel, style: TextStyle(color: Colors.black)),
               ),
 
               /// DELETE
@@ -53,7 +51,7 @@ Future<void> showDeletePlaceDialog({
                   isLoading = false;
                   setState(() {});
                   if (!context.mounted) return;
-                  showSuccessToast(context, 'Place deleted successfully');
+                  showSuccessToast(context, loc.placeDeletedSuccessfully);
                   if (!context.mounted) return;
                   Navigator.pop(context);
                 },
@@ -67,7 +65,7 @@ Future<void> showDeletePlaceDialog({
                           strokeWidth: 3,
                         ),
                       )
-                    : Text('Delete', style: TextStyle(color: Colors.white)),
+                    : Text(loc.delete, style: TextStyle(color: Colors.white)),
               ),
             ],
           );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tourism_app/Screens/Initial_page.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 Future<void> showLogoutDialog(BuildContext context) async {
   bool isLoading = false;
@@ -8,6 +9,8 @@ Future<void> showLogoutDialog(BuildContext context) async {
     context: context,
     barrierDismissible: false,
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
+
       return StatefulBuilder(
         builder: (context, setState) {
           return Dialog(
@@ -33,16 +36,16 @@ Future<void> showLogoutDialog(BuildContext context) async {
                   const SizedBox(height: 16),
 
                   ///  TITLE
-                  const Text(
-                    "Logout",
+                  Text(
+                    loc.logout,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 8),
 
                   ///  MESSAGE
-                  const Text(
-                    "Are you sure you want to log out of your account?",
+                  Text(
+                    loc.confirmLogout,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black),
                   ),
@@ -63,8 +66,8 @@ Future<void> showLogoutDialog(BuildContext context) async {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text(
-                            "Cancel",
+                          child: Text(
+                            loc.cancel,
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -112,8 +115,11 @@ Future<void> showLogoutDialog(BuildContext context) async {
                                   ),
                                 )
                               : Text(
-                                  "Logout",
-                                  style: TextStyle(color: Colors.white),
+                                  loc.logout,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
                                 ),
                         ),
                       ),

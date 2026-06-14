@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Change_password_screen.dart';
 import 'package:tourism_app/Screens/Edit_user_screen.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class EditProfileOptionsScreen extends StatelessWidget {
   const EditProfileOptionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
@@ -14,9 +17,13 @@ class EditProfileOptionsScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          loc.editProfile,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
@@ -30,15 +37,15 @@ class EditProfileOptionsScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
-            const Text(
-              'Account Settings',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            Text(
+              loc.accountSettings,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
             Text(
-              'Manage your account information securely.',
+              loc.manageYourAccountInformationSecurely,
               style: TextStyle(color: Colors.grey[600], fontSize: 16),
             ),
 
@@ -48,8 +55,8 @@ class EditProfileOptionsScreen extends StatelessWidget {
             settingsCard(
               context: context,
               icon: Icons.person_outline,
-              title: 'Edit Username',
-              subtitle: 'Change your first and last name',
+              title: loc.editUsername,
+              subtitle: loc.changeYourFirstAndLastName,
               color: Colors.blue,
 
               onTap: () {
@@ -71,8 +78,8 @@ class EditProfileOptionsScreen extends StatelessWidget {
             settingsCard(
               context: context,
               icon: Icons.lock_outline,
-              title: 'Edit Password',
-              subtitle: 'Update your account password',
+              title: loc.editPassword,
+              subtitle: loc.updateYourAccountPassword,
               color: Colors.green,
 
               onTap: () {
@@ -148,7 +155,7 @@ class EditProfileOptionsScreen extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

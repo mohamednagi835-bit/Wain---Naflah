@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 Future<void> showApprvePlace({
   required BuildContext context,
@@ -12,19 +13,19 @@ Future<void> showApprvePlace({
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setState) {
+          final loc = AppLocalizations.of(context)!;
+
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
 
-            title: const Text(
-              'Approve Place',
+            title: Text(
+              loc.approvePlace,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
-            content: const Text(
-              'Are you sure you want to approve this place? It will become visible to users in the application..',
-            ),
+            content: Text(loc.approvePlaceConfirmation),
 
             actions: [
               /// CANCEL
@@ -32,10 +33,7 @@ Future<void> showApprvePlace({
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.black),
-                ),
+                child: Text(loc.cancel, style: TextStyle(color: Colors.black)),
               ),
 
               /// DELETE
@@ -55,7 +53,7 @@ Future<void> showApprvePlace({
                   isLoading = false;
                   setState(() {});
                   if (!context.mounted) return;
-                  showSuccessToast(context, 'Place approved successfully');
+                  showSuccessToast(context, loc.placeApprovedSuccessfully);
                   if (!context.mounted) return;
                   Navigator.pop(context);
                 },
@@ -69,7 +67,7 @@ Future<void> showApprvePlace({
                           strokeWidth: 3,
                         ),
                       )
-                    : Text('Approve', style: TextStyle(color: Colors.white)),
+                    : Text(loc.approve, style: TextStyle(color: Colors.white)),
               ),
             ],
           );

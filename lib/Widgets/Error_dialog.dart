@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 void showErrorDialog(BuildContext context, {String? message}) {
   showDialog(
     context: context,
     barrierDismissible: true, // user can tap outside
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
+
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
@@ -30,23 +33,23 @@ void showErrorDialog(BuildContext context, {String? message}) {
               const SizedBox(height: 20),
 
               /// Title
-              const Text(
-                "Something went wrong",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Text(
+                loc.somethingWentWrong,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 10),
 
               /// Message (dynamic)
               Text(
-                message ?? "Login failed. Please try again.",
+                message ?? loc.loginFailed,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15, color: Colors.black),
+                style: const TextStyle(fontSize: 14, color: Colors.black),
               ),
 
               const SizedBox(height: 25),
 
-              /// 🔘 Buttons
+              ///  Buttons
               Row(
                 children: [
                   /// Cancel / Close
@@ -62,8 +65,8 @@ void showErrorDialog(BuildContext context, {String? message}) {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        "Cancel",
+                      child: Text(
+                        loc.ok,
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
@@ -72,25 +75,25 @@ void showErrorDialog(BuildContext context, {String? message}) {
                   const SizedBox(width: 10),
 
                   /// Retry
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        //  retry logic here
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        "Retry",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.pop(context);
+                  //       //  retry logic here
+                  //     },
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.red,
+                  //       padding: const EdgeInsets.symmetric(vertical: 14),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(12),
+                  //       ),
+                  //     ),
+                  //     child: const Text(
+                  //       "Retry",
+                  //       style: TextStyle(color: Colors.white),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ],

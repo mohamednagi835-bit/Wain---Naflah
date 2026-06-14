@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Admin_places.dart';
 import 'package:tourism_app/Screens/Pending_place.dart';
 import 'package:tourism_app/Screens/User_mangement.dart';
+import 'package:tourism_app/Widgets/Launguae_dialog.dart';
 import 'package:tourism_app/Widgets/Logout_Dialog.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -40,16 +42,36 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
       appBar: AppBar(
-        title: const Text(
-          "Admin Dashboard",
+        title: Text(
+          loc.adminDashboard,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.language, color: Colors.black, size: 20),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => LanguageDialog(),
+              );
+            },
+          ),
+        ],
       ),
 
       body: RefreshIndicator(
@@ -67,7 +89,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   children: [
                     Expanded(
                       child: statCard(
-                        title: "Users",
+                        title: loc.users,
                         value: usersCount.toString(),
                         icon: Icons.people,
                         color: Colors.blue,
@@ -78,7 +100,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                     Expanded(
                       child: statCard(
-                        title: "Places",
+                        title: loc.places,
                         value: placesCount.toString(),
                         icon: Icons.place,
                         color: Colors.green,
@@ -89,8 +111,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                 const SizedBox(height: 30),
 
-                const Text(
-                  "Management",
+                Text(
+                  loc.management,
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
 
@@ -100,8 +122,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 /// CONTROL OPTIONS
                 /// =====================
                 controlCard(
-                  title: "Pending Places",
-                  subtitle: "Approve or reject new places",
+                  title: loc.pendingPlaces,
+                  subtitle: loc.approveOrRejectNewPlaces,
                   icon: Icons.pending_actions,
                   color: Colors.orange,
                   onTap: () {
@@ -119,8 +141,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 const SizedBox(height: 14),
 
                 controlCard(
-                  title: "Users",
-                  subtitle: "View and manage users",
+                  title: loc.users,
+                  subtitle: loc.viewAndManageUsers,
                   icon: Icons.people_outline,
                   color: Colors.blue,
                   onTap: () {
@@ -138,8 +160,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 const SizedBox(height: 14),
 
                 controlCard(
-                  title: "Places",
-                  subtitle: "Edit or delete places",
+                  title: loc.places,
+                  subtitle: loc.editOrDeletePlaces,
                   icon: Icons.place_outlined,
                   color: Colors.green,
                   onTap: () {
@@ -155,8 +177,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 const SizedBox(height: 14),
                 controlCard(
-                  title: 'Logout',
-                  subtitle: 'Logout from your account',
+                  title: loc.logout,
+                  subtitle: loc.logoutFromYourAccount,
                   icon: Icons.logout,
                   color: Colors.red,
                   onTap: () {

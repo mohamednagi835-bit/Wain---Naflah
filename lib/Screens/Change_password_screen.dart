@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Screens/Initial_page.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -36,10 +37,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       password: currentPassword,
     );
 
-    /// 🔥 re-login silently
+    /// re-login silently
     await user.reauthenticateWithCredential(credential);
 
-    /// 🔥 update password
+    /// update password
     await user.updatePassword(newPassword);
     isLoading = false;
     setState(() {});
@@ -47,6 +48,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF5F7FA),
 
@@ -55,9 +58,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
 
-        title: const Text(
-          'Change Password',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          loc.changePassword,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
 
         iconTheme: const IconThemeData(color: Colors.black),
@@ -73,15 +80,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             const SizedBox(height: 20),
 
             /// HEADER
-            const Text(
-              'Security Settings',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            Text(
+              loc.securitySettings,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 10),
 
             Text(
-              'Choose a strong password to keep your account secure.',
+              loc.chooseAStrongPasswordToKeepYourAccountSecure,
               style: TextStyle(color: Colors.grey[600], fontSize: 16),
             ),
 
@@ -91,7 +98,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordField(
               controller: currentPasswordController,
 
-              label: 'Current Password',
+              label: '${loc.enter} ${loc.currentPassword}',
 
               obscure: obscureCurrent,
 
@@ -108,7 +115,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordField(
               controller: newPasswordController,
 
-              label: 'New Password',
+              label: '${loc.enter} ${loc.newPassword}',
 
               obscure: obscureNew,
 
@@ -125,7 +132,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordField(
               controller: confirmPasswordController,
 
-              label: 'Confirm Password',
+              label: '${loc.enter} ${loc.confirmPassword}',
 
               obscure: obscureConfirm,
 
@@ -145,12 +152,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-
-                  elevation: 0,
-
+                  backgroundColor: const Color(0xFF2E7D32),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                 ),
 
@@ -172,7 +176,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
 
-                        content: const Text('Passwords do not match'),
+                        content: Text(loc.passwordsDoNotMatch),
                       ),
                     );
                     setState(() {
@@ -211,7 +215,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
 
-                        content: const Text('Password updated successfully'),
+                        content: Text(loc.passwordUpdatedSuccessfully),
                       ),
                     );
                   }
@@ -236,13 +240,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           strokeWidth: 2.5,
                         ),
                       )
-                    : const Text(
-                        'Update Password',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    : Text(
+                        loc.updatePassword,
+                        style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
               ),
             ),
@@ -306,7 +306,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
 
             decoration: InputDecoration(
-              hintText: 'Enter $label',
+              hintText: label,
 
               hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15),
 

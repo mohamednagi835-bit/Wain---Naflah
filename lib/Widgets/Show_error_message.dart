@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 void showErrorMessageDialog(BuildContext context, {required String message}) {
   showDialog(
     context: context,
     barrierDismissible: true,
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         elevation: 12,
@@ -21,7 +23,7 @@ void showErrorMessageDialog(BuildContext context, {required String message}) {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              /// 🔴 Top Accent Line
+              ///  Top Accent Line
               Container(
                 height: 4,
                 width: 50,
@@ -33,9 +35,9 @@ void showErrorMessageDialog(BuildContext context, {required String message}) {
 
               const SizedBox(height: 16),
 
-              /// ⚠️ Title
-              const Text(
-                "Error",
+              ///  Title
+              Text(
+                loc.ok,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -45,7 +47,7 @@ void showErrorMessageDialog(BuildContext context, {required String message}) {
 
               const SizedBox(height: 10),
 
-              /// 📝 Message
+              ///  Message
               Text(
                 message,
                 textAlign: TextAlign.center,
@@ -58,7 +60,7 @@ void showErrorMessageDialog(BuildContext context, {required String message}) {
 
               const SizedBox(height: 24),
 
-              /// 🔘 OK Button
+              ///  OK Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -73,8 +75,8 @@ void showErrorMessageDialog(BuildContext context, {required String message}) {
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    "OK",
+                  child: Text(
+                    loc.cancel,
                     style: TextStyle(fontSize: 15, color: Colors.white),
                   ),
                 ),

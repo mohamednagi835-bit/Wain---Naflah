@@ -14,6 +14,7 @@ import 'package:tourism_app/Models/place.dart';
 import 'package:tourism_app/Screens/Map_screen.dart';
 import 'package:tourism_app/Widgets/Map_preview.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 class EditPlaceScreen extends StatefulWidget {
   final PlaceModel place;
@@ -69,6 +70,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
     final url =
         'https://nominatim.openstreetmap.org/search'
         '?q=$query'
+        '&countrycodes=sa'
         '&format=jsonv2'
         '&limit=5';
     final response = await http.get(
@@ -105,7 +107,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('enterd build method');
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
@@ -120,7 +122,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Edit  place',
+                loc.editPlace,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -129,7 +131,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
               ),
               SizedBox(height: 4),
               Text(
-                'Edit place user discovered',
+                loc.editPlaceYouDiscovered,
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
@@ -146,8 +148,8 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             /// ==========================
             /// TITLE
             /// ==========================
-            const Text(
-              'Place Title',
+            Text(
+              loc.placeTitle,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
 
@@ -156,7 +158,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             TextField(
               controller: titleControler,
               decoration: InputDecoration(
-                hintText: 'Enter place title',
+                hintText: loc.enterPlaceTitle,
                 filled: true,
                 fillColor: Colors.white,
 
@@ -172,8 +174,8 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             /// ==========================
             /// DESCRIPTION
             /// ==========================
-            const Text(
-              'Description',
+            Text(
+              loc.description,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
 
@@ -183,7 +185,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
               controller: describtionController,
               maxLines: 5,
               decoration: InputDecoration(
-                hintText: 'Write place description...',
+                hintText: loc.writePlaceDescription,
                 filled: true,
                 fillColor: Colors.white,
 
@@ -199,8 +201,8 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             /// ==========================
             /// CATEGORY
             /// ==========================
-            const Text(
-              'Category',
+            Text(
+              loc.category,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
 
@@ -217,26 +219,26 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
               child: DropdownButtonFormField<String>(
                 decoration: const InputDecoration(border: InputBorder.none),
 
-                hint: const Text('Choose category'),
+                hint: Text(loc.chooseCategory),
                 initialValue: placeCategory,
 
-                items: const [
-                  DropdownMenuItem(value: 'Mountain', child: Text('Mountain')),
-                  DropdownMenuItem(value: 'Sea', child: Text('Sea')),
-                  DropdownMenuItem(value: 'Beach', child: Text('Beach')),
+                items: [
+                  DropdownMenuItem(
+                    value: 'Mountain',
+                    child: Text(loc.mountain),
+                  ),
+                  DropdownMenuItem(value: 'Sea', child: Text(loc.sea)),
+                  DropdownMenuItem(value: 'Beach', child: Text(loc.beach)),
                   DropdownMenuItem(
                     value: 'Entertainment',
-                    child: Text('Entertainment'),
+                    child: Text(loc.entertainment),
                   ),
                   DropdownMenuItem(
                     value: 'Historical',
-                    child: Text('Historical'),
+                    child: Text(loc.historical),
                   ),
-                  DropdownMenuItem(value: 'Desert', child: Text('Desert')),
-                  DropdownMenuItem(
-                    value: 'Otherwise',
-                    child: Text('Otherwise'),
-                  ),
+                  DropdownMenuItem(value: 'Desert', child: Text(loc.desert)),
+                  DropdownMenuItem(value: 'Otherwise', child: Text(loc.other)),
                 ],
 
                 onChanged: (value) {
@@ -250,8 +252,8 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             /// ==========================
             /// IMAGE
             /// ==========================
-            const Text(
-              'Place Image',
+            Text(
+              loc.placeImage,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
 
@@ -300,8 +302,8 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
             /// ==========================
             /// LOCATION SECTION
             /// ==========================
-            const Text(
-              'Location',
+            Text(
+              loc.location,
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
             ),
 
@@ -316,7 +318,7 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
                 });
               },
               decoration: InputDecoration(
-                hintText: 'Search location...',
+                hintText: loc.searchLocation,
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
@@ -412,14 +414,17 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
                   setState(() {
                     isLoading = true;
                   });
+                  String imageUrl = '';
                   final storageRef = FirebaseStorage.instance
                       .ref()
                       .child('places')
                       .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-                  await storageRef.putFile(selectedImage!);
+                  if (selectedImage != null) {
+                    await storageRef.putFile(selectedImage!);
+                    imageUrl = await storageRef.getDownloadURL();
+                  }
 
-                  final imageUrl = await storageRef.getDownloadURL();
                   await FirebaseFirestore.instance
                       .collection('places')
                       .doc(widget.place.id)
@@ -432,22 +437,20 @@ class _AddPlaceScreenState extends State<EditPlaceScreen> {
                         'location': placeLocation,
                         'category': placeCategory,
                       });
-                  if (mounted) {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    if (!context.mounted) return;
-                    showSuccessToast(context, 'Place edited successfully');
-                  } else {
-                    return;
-                  }
+
+                  if (!context.mounted) return;
+                  setState(() {
+                    isLoading = false;
+                  });
+                  if (!context.mounted) return;
+                  showSuccessToast(context, loc.placeEditedSuccessfully);
                 },
                 child: isLoading
                     ? Center(
                         child: CircularProgressIndicator(color: Colors.white),
                       )
                     : Text(
-                        'Submit Place',
+                        loc.submitPlace,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,

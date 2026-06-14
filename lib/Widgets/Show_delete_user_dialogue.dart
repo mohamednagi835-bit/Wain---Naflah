@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 Future<void> showDeleteUserDialog({
   required BuildContext context,
@@ -9,6 +10,8 @@ Future<void> showDeleteUserDialog({
   return showDialog(
     context: context,
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
+
       bool isLoading = false;
       return StatefulBuilder(
         builder: (context, setState) {
@@ -17,14 +20,12 @@ Future<void> showDeleteUserDialog({
               borderRadius: BorderRadius.circular(16),
             ),
 
-            title: const Text(
-              'Delete User?',
+            title: Text(
+              loc.blockUser,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
-            content: const Text(
-              'Are you sure you want to delete this user? This action cannot be undone.',
-            ),
+            content: Text(loc.blockUserConfirmation),
 
             actions: [
               /// CANCEL
@@ -32,10 +33,7 @@ Future<void> showDeleteUserDialog({
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.black),
-                ),
+                child: Text(loc.cancel, style: TextStyle(color: Colors.black)),
               ),
 
               /// DELETE
@@ -43,17 +41,25 @@ Future<void> showDeleteUserDialog({
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
 
                 onPressed: () async {
-                  isLoading = true;
-                  setState(() {});
+                  if (!context.mounted) return;
+
+                  setState(() {
+                    isLoading = true;
+                  });
 
                   await FirebaseFirestore.instance
                       .collection('users')
                       .doc(id)
-                      .delete();
-                  isLoading = false;
-                  setState(() {});
+                      .update({'isBlocked': 'True'});
+                  if (!context.mounted) return;
+
+                  setState(() {
+                    isLoading = false;
+                  });
+                  if (!context.mounted) return;
+
                   Navigator.pop(context);
-                  showSuccessToast(context, 'Deleted successfully');
+                  showSuccessToast(context, loc.blockedSuccessfully);
                 },
 
                 child: isLoading
@@ -65,7 +71,7 @@ Future<void> showDeleteUserDialog({
                           strokeWidth: 3,
                         ),
                       )
-                    : Text('Delete', style: TextStyle(color: Colors.white)),
+                    : Text(loc.block, style: TextStyle(color: Colors.white)),
               ),
             ],
           );

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Screens/Change_language.dart';
 import 'package:tourism_app/Screens/Edit_options_screen.dart';
+import 'package:tourism_app/Screens/Favourite_places.dart';
 import 'package:tourism_app/Screens/Feed_screen.dart';
+import 'package:tourism_app/Screens/login_screen.dart';
 import 'package:tourism_app/Widgets/Logout_Dialog.dart';
 import 'package:tourism_app/Widgets/build_option.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
@@ -77,7 +79,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   const SizedBox(height: 12),
 
-                  /// 🏷️ Name
+                  ///  Name
                   Text(
                     '${currentUser.firsrName} ${currentUser.lastName}',
                     style: const TextStyle(
@@ -88,7 +90,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   const SizedBox(height: 4),
 
-                  /// 📧 Email
+                  ///  Email
                   Text(
                     currentUser.email,
                     style: TextStyle(color: Colors.grey[600]),
@@ -99,9 +101,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
             const SizedBox(height: 10),
 
-            const SizedBox(height: 0),
-
-            /// ⚙️ OPTIONS
+            ///  OPTIONS
             Container(
               color: Colors.white,
               child: Column(
@@ -129,7 +129,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return FeedScreen();
+                            return (FavouritePlaces());
                           },
                         ),
                       );
@@ -188,6 +188,3 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 }
-
-  /// ⚙️ OPTION ITEM
-

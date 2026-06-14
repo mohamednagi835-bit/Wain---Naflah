@@ -6,7 +6,8 @@ import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Models/user.dart';
 import 'package:tourism_app/Screens/Add_place_screen.dart';
 import 'package:tourism_app/Screens/Feed_screen.dart';
-import 'package:tourism_app/Screens/Feed_screen_test.dart';
+import 'package:tourism_app/Screens/Feed_screen.dart';
+import 'package:tourism_app/Screens/Initial_page.dart';
 import 'package:tourism_app/Screens/Profile_screen.dart';
 import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
@@ -20,11 +21,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
+  List<int> prevIndecies = [0];
+  final ScrollController feedController = ScrollController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    blockStatus();
     getUser();
   }
 
@@ -35,15 +39,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-
-    final screens = [FeedScreenTest(), AddPlaceScreen(), AccountScreen()];
-
+    final screens = [
+      FeedScreen(feedController: feedController),
+      AddPlaceScreen(),
+      AccountScreen(),
+    ];
     return Scaffold(
-      body: screens[currentIndex],
-
+      body: //screens[currentIndex],
+      IndexedStack(
+        index: currentIndex,
+        children: screens,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {
+          prevIndecies.add(index);
+          if (index == 0 && prevIndecies[prevIndecies.length - 2] == 0) {
+            feedController.animateTo(
+              0,
+              duration: const Duration(microseconds: 200),
+              curve: Curves.easeInOut,
+            );
+            prevIndecies = [0];
+          }
           setState(() {
             currentIndex = index;
           });
@@ -63,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             //   height: 24,
             //   child: Image.asset('assets/images/map.png'),
             // ),
-            label: loc.map,
+            label: loc.addPlace,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person),
@@ -74,38 +92,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget mapColor() {
-    if (currentIndex == 1) {
-      return Image.asset(
-        'assets/images/map.png',
-        color: const Color(0xFF2E7D32),
-      );
+  Future<void> getUser() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+
+    if (!doc.exists) return;
+
+    currentUser = AppuUSer(
+      email: doc['email'] ?? '',
+      paaword: doc['Password'] ?? '',
+      firsrName: doc['First Name'] ?? '',
+      lastName: doc['Last Name'] ?? '',
+      phoneNumber: doc['Phone Number'] ?? '',
+      id: doc.id,
+    );
+  }
+
+  Future<void> blockStatus() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+    if (!doc.exists) {
+      return;
     } else {
-      return Image.asset('assets/images/map.png');
+      if (doc['isBlocked'] == 'True') {
+        await FirebaseAuth.instance.signOut();
+
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+
+        //   MaterialPageRoute(builder: (context) => InitialPage()),
+
+        //   (route) => false,
+        // );
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    feedController.dispose();
   }
 }
 
-Future<void> getUser() async {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
-
-  final doc = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .get();
-
-  if (!doc.exists) return;
-  print(doc['email']);
-
-  currentUser = AppuUSer(
-    email: doc['email'] ?? '',
-    paaword: doc['Password'] ?? '',
-    firsrName: doc['First Name'] ?? '',
-    lastName: doc['Last Name'] ?? '',
-    phoneNumber: doc['Phone Number'] ?? '',
-    id: doc.id,
-  );
-}
 // Future<void> getUser() async {
 //   final user = FirebaseAuth.instance.currentUser;
 

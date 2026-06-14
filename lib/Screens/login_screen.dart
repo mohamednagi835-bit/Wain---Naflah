@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Helpers/Handle_error_message.dart';
+import 'package:tourism_app/Screens/Initial_page.dart';
 import 'package:tourism_app/Screens/Signup_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
 import 'package:tourism_app/Widgets/Error_dialog.dart';
@@ -22,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   bool isLoading = false;
+  bool isBlocked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -137,11 +140,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (!mounted) return;
-                      setState(() {
-                        isLoading = true;
-                      });
                       if (formKey.currentState!.validate()) {
+                        if (!mounted) return;
+                        setState(() {
+                          isLoading = true;
+                        });
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth
@@ -159,35 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             return;
                           }
 
-                          //  print('User is: ${FirebaseAuth.instance.currentUser}');
-
-                          // final uid = FirebaseAuth.instance.currentUser!.uid;
-                          // final doc = await FirebaseFirestore.instance
-                          //     .collection('users')
-                          //     .doc(uid)
-                          //     .get();
-                          // if (doc['role'] == 'User') {
-                          //   Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) {
-                          //         return HomeScreen();
-                          //       },
-                          //     ),
-                          //   );
-                          // } else {
-                          //   Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (context) {
-                          //         return AdminDashboard();
-                          //       },
-                          //     ),
-                          //   );
-                          // }
-
-                          if (mounted) {
-                            showSuccessToast(context, 'Loggined successfully');
+                          if (context.mounted) {
+                            showSuccessToast(context, loc.loggedInSuccessfully);
                           } else {
                             return;
                           }
@@ -199,31 +175,46 @@ class _LoginScreenState extends State<LoginScreen> {
                             case 'user-not-found':
                               showErrorDialog(
                                 context,
-                                message: getFirebaseErrorMessage(e.code),
+                                message: getFirebaseErrorMessage(
+                                  e.code,
+                                  context,
+                                ),
                               );
 
                             case 'wrong-password':
                               showErrorDialog(
                                 context,
-                                message: getFirebaseErrorMessage(e.code),
+                                message: getFirebaseErrorMessage(
+                                  e.code,
+                                  context,
+                                ),
                               );
 
                             case 'email-already-in-use':
                               showErrorDialog(
                                 context,
-                                message: getFirebaseErrorMessage(e.code),
+                                message: getFirebaseErrorMessage(
+                                  e.code,
+                                  context,
+                                ),
                               );
 
                             case 'weak-password':
                               showErrorDialog(
                                 context,
-                                message: getFirebaseErrorMessage(e.code),
+                                message: getFirebaseErrorMessage(
+                                  e.code,
+                                  context,
+                                ),
                               );
 
                             case 'invalid-email':
                               showErrorDialog(
                                 context,
-                                message: getFirebaseErrorMessage(e.code),
+                                message: getFirebaseErrorMessage(
+                                  e.code,
+                                  context,
+                                ),
                               );
 
                             case 'network-request-failed':

@@ -1,24 +1,29 @@
-String getFirebaseErrorMessage(String code) {
+import 'package:flutter/material.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
+
+String getFirebaseErrorMessage(String code, BuildContext context) {
+  final loc = AppLocalizations.of(context)!;
+
   switch (code) {
     case 'user-not-found':
-      return "No account found with this email";
+      return loc.noAccountFoundWithThisEmail;
 
     case 'wrong-password':
-      return "Incorrect password";
+      return loc.incorrectPassword;
 
     case 'email-already-in-use':
-      return "This email is already registered";
+      return loc.emailAlreadyRegistered;
 
     case 'weak-password':
-      return "Password is too weak";
+      return loc.passwordTooWeak;
 
     case 'invalid-email':
-      return "Invalid email format";
+      return loc.invalidEmailFormat;
 
     case 'network-request-failed':
-      return "No internet connection";
+      return loc.noInternetConnection;
 
     default:
-      return "Something went wrong. Please try again";
+      return loc.somethingWentWrong;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 Future<void> showRejectPlace({
   required BuildContext context,
@@ -10,6 +11,8 @@ Future<void> showRejectPlace({
   return showDialog(
     context: context,
     builder: (context) {
+      final loc = AppLocalizations.of(context)!;
+
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
@@ -17,14 +20,12 @@ Future<void> showRejectPlace({
               borderRadius: BorderRadius.circular(16),
             ),
 
-            title: const Text(
-              'Reject Place',
+            title: Text(
+              loc.rejectPlace,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
-            content: const Text(
-              'Are you sure you want to reject this place? The place will not be published in the application.',
-            ),
+            content: Text(loc.deletePlaceConfirmation),
 
             actions: [
               /// CANCEL
@@ -32,10 +33,7 @@ Future<void> showRejectPlace({
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.black),
-                ),
+                child: Text(loc.cancel, style: TextStyle(color: Colors.black)),
               ),
 
               /// DELETE
@@ -53,7 +51,7 @@ Future<void> showRejectPlace({
                   isLoading = false;
                   setState(() {});
                   if (!context.mounted) return;
-                  showSuccessToast(context, 'Place rejected successfully');
+                  showSuccessToast(context, loc.placeRejectedSuccessfully);
                   if (!context.mounted) return;
                   Navigator.pop(context);
                 },
@@ -67,7 +65,7 @@ Future<void> showRejectPlace({
                           strokeWidth: 3,
                         ),
                       )
-                    : Text('Reject', style: TextStyle(color: Colors.white)),
+                    : Text(loc.reject, style: TextStyle(color: Colors.white)),
               ),
             ],
           );

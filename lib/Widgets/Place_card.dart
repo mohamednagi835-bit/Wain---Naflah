@@ -7,8 +7,28 @@ import 'package:tourism_app/l10n/app_localizations.dart';
 class PlaceCard extends StatelessWidget {
   final PlaceModel place;
   final Function() onLike;
+  final enCategories = [
+    'All',
+    'Mountain',
+    'Sea',
+    'Beach',
+    'Entertainment',
+    'Historical',
+    'Desert',
+    'Otherwise',
+  ];
+  final arCategories = [
+    'الكل',
+    'جبل',
+    'بحر',
+    'شاطئ',
+    'ترفيه',
+    'تاريخي',
+    'صحراء',
+    'أخرى',
+  ];
 
-  const PlaceCard({super.key, required this.place, required this.onLike});
+  PlaceCard({super.key, required this.place, required this.onLike});
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +174,7 @@ class PlaceCard extends StatelessWidget {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        place.category,
+                        getCategory(place.category, localeCode),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey.shade700,
@@ -235,6 +255,20 @@ class PlaceCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getCategory(String category, String languageCode) {
+    int i;
+    for (i = 0; i < enCategories.length; i++) {
+      if (category == enCategories[i]) {
+        break;
+      }
+    }
+    if (languageCode == 'en') {
+      return enCategories[i];
+    } else {
+      return arCategories[i];
+    }
   }
 }
 

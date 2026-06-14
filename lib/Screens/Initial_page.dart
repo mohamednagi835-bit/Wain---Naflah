@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/Screens/Admin_dash_board.dart';
 import 'package:tourism_app/Screens/Home_screen.dart';
 import 'package:tourism_app/Screens/if_needed.dart';
 import 'package:tourism_app/Screens/login_screen.dart';
+import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 
 class InitialPage extends StatelessWidget {
   const InitialPage({super.key});
@@ -17,6 +19,20 @@ class InitialPage extends StatelessWidget {
         .get();
     final role = doc['role'];
     if (role == 'Admin') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> isBlocked() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+    final role = doc['isBlocked'];
+    if (role == 'True') {
       return true;
     } else {
       return false;

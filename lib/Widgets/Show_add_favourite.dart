@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_app/l10n/app_localizations.dart';
 
 void showFavoriteToast(BuildContext context) {
+  final loc = AppLocalizations.of(context)!;
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -20,7 +23,7 @@ void showFavoriteToast(BuildContext context) {
 
         child: Row(
           children: [
-            /// ❤️ ICON
+            ///  ICON
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -32,14 +35,14 @@ void showFavoriteToast(BuildContext context) {
 
             const SizedBox(width: 12),
 
-            /// 📝 TEXT
-            const Expanded(
+            ///  TEXT
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Added to favourites",
+                    loc.addToFavourite,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -50,7 +53,7 @@ void showFavoriteToast(BuildContext context) {
                   SizedBox(height: 2),
 
                   Text(
-                    "You can find it later in saved places",
+                    loc.youCanFindItLaterInSavedPlaces,
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],

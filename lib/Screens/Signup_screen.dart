@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tourism_app/Helpers/Handle_error_message.dart';
+import 'package:tourism_app/Screens/Initial_page.dart';
 import 'package:tourism_app/Screens/login_screen.dart';
 import 'package:tourism_app/Widgets/Custom_text_field.dart';
 import 'package:tourism_app/Widgets/Error_dialog.dart';
@@ -262,6 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           'Phone Number': phoneNumber,
                           'id': FirebaseAuth.instance.currentUser!.uid,
                           'role': 'User',
+                          'isBlocked': 'False',
                         });
 
                         isLoading = false;
@@ -284,12 +286,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         //     phoneNumber: data['Phone Number'],
                         //   );
                         // }
-
+                        if (!context.mounted) return;
                         Navigator.pushAndRemoveUntil(
                           context,
 
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
+                            builder: (context) => InitialPage(),
                           ),
 
                           (route) => false,
@@ -301,31 +303,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           case 'user-not-found':
                             showErrorDialog(
                               context,
-                              message: getFirebaseErrorMessage(e.code),
+                              message: getFirebaseErrorMessage(e.code, context),
                             );
 
                           case 'wrong-password':
                             showErrorDialog(
                               context,
-                              message: getFirebaseErrorMessage(e.code),
+                              message: getFirebaseErrorMessage(e.code, context),
                             );
 
                           case 'email-already-in-use':
                             showErrorDialog(
                               context,
-                              message: getFirebaseErrorMessage(e.code),
+                              message: getFirebaseErrorMessage(e.code, context),
                             );
 
                           case 'weak-password':
                             showErrorDialog(
                               context,
-                              message: getFirebaseErrorMessage(e.code),
+                              message: getFirebaseErrorMessage(e.code, context),
                             );
 
                           case 'invalid-email':
                             showErrorDialog(
                               context,
-                              message: getFirebaseErrorMessage(e.code),
+                              message: getFirebaseErrorMessage(e.code, context),
                             );
 
                           case 'network-request-failed':

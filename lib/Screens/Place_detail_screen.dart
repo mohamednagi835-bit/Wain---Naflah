@@ -41,7 +41,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
   late Stream<QuerySnapshot> commentStream;
   late Stream<DocumentSnapshot> ratingStream;
   final uid = FirebaseAuth.instance.currentUser!.uid;
-
+  late bool isFavourite;
   @override
   void initState() {
     // TODO: implement initState
@@ -52,6 +52,22 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         .collection('places')
         .doc(widget.place.id)
         .snapshots();
+    isPlaceFavourite();
+  }
+
+  Future<void> isPlaceFavourite() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance
+        .collection('favourite places')
+        .where('userid', isEqualTo: uid)
+        .where('place', isEqualTo: widget.place.id)
+        .limit(1)
+        .get();
+    if (doc.docs.isEmpty) {
+      isFavourite = false;
+    } else {
+      isFavourite = true;
+    }
   }
 
   @override
@@ -135,7 +151,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                 CommentModel(
                   userName: snapshot.data!.docs[i]['user'],
                   text: snapshot.data!.docs[i]['content'],
-                  time: temp.toDate(),
+                  createdAt: temp.toDate(),
                 ),
               );
             }
@@ -227,7 +243,6 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         onSelected: (value) async {
                           if (value == 'rate') {
                             ///  RATE
-                            print("Rate clicked");
                             showRatingDialog(context, widget.place);
                           }
 
@@ -236,45 +251,62 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                             await favouritePlacses.add({
                               'userid': FirebaseAuth.instance.currentUser!.uid,
                               'place': widget.place.id,
-                              // 'title': widget.place.name,
-                              // 'description': widget.place.description,
-                              // 'commentsCount': widget.place.commentCount,
-                              // 'createdAt': widget.place.createdAt,
-                              // 'likesCount': widget.place.likesCount,
-                              // 'rate': widget.place.rating,
-                              // 'ratersCount': widget.place.retersNO,
-                              // 'userName': widget.place.userName,
-                              // 'userID': uid,
-                              // 'image': widget.place.image,
                             });
-                            print("Favorite clicked");
                             showFavoriteToast(context);
                           }
                         },
 
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 'rate',
-                            child: Row(
-                              children: const [
-                                Icon(Icons.star, color: Colors.amber),
-                                SizedBox(width: 10),
-                                Text("Rate"),
-                              ],
-                            ),
-                          ),
+                        itemBuilder: (context) {
+                          if (isFavourite == false) {
+                            return [
+                              PopupMenuItem(
+                                value: 'rate',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.amber),
+                                    SizedBox(width: 10),
+                                    Text(loc.rate),
+                                  ],
+                                ),
+                              ),
 
-                          PopupMenuItem(
-                            value: 'favorite',
-                            child: Row(
-                              children: const [
-                                Icon(Icons.favorite, color: Colors.red),
-                                SizedBox(width: 10),
-                                Text("Add to favourite"),
-                              ],
-                            ),
-                          ),
-                        ],
+                              PopupMenuItem(
+                                value: 'favorite',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.favorite, color: Colors.red),
+                                    SizedBox(width: 10),
+                                    Text(loc.addToFavourite),
+                                  ],
+                                ),
+                              ),
+                            ];
+                          } else {
+                            return [
+                              PopupMenuItem(
+                                value: 'rate',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.amber),
+                                    SizedBox(width: 10),
+                                    Text(loc.rate),
+                                  ],
+                                ),
+                              ),
+
+                              PopupMenuItem(
+                                value: 'favorite',
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.favorite, color: Colors.red),
+                                    SizedBox(width: 10),
+                                    Text(loc.removeFromFavourite),
+                                  ],
+                                ),
+                              ),
+                            ];
+                          }
+                        },
                       ),
 
                       /// (optional future)
@@ -283,14 +315,14 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   ),
                 ),
 
-                /// 📄 CONTENT
+                ///  CONTENT
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// 🏷️ NAME
+                        ///  NAME
                         Text(
                           widget.place.name,
                           style: const TextStyle(
@@ -301,7 +333,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
                         const SizedBox(height: 10),
 
-                        /// 📝 DESCRIPTION
+                        ///  DESCRIPTION
                         Text(
                           widget.place.description,
                           style: const TextStyle(color: Colors.grey),
@@ -309,7 +341,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
                         const SizedBox(height: 16),
 
-                        /// ❤️ + ⭐
+                        ///
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -319,7 +351,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                   onTap: () async {
                                     final wasLiked = widget.place.isLiked;
 
-                                    /// 🔥 1. INSTANT LOCAL UPDATE
+                                    ///  1. INSTANT LOCAL UPDATE
 
                                     setState(() {
                                       if (wasLiked) {
@@ -329,8 +361,8 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                         widget.place.likesCount++;
                                         widget.placeIDs.add(widget.place.id);
                                       }
-                                      widget.place.isLiked =
-                                          !widget.place.isLiked;
+                                      widget.place.isLiked = widget.placeIDs
+                                          .contains(widget.place.id);
                                     });
 
                                     // if(wasLiked) {
@@ -353,7 +385,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                               'place': widget.place.id,
                                             });
                                       }
-                                      /// 💔 REMOVE LIKE
+                                      ///  REMOVE LIKE
                                       else {
                                         final query = await FirebaseFirestore
                                             .instance
@@ -485,7 +517,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                         Divider(color: Colors.grey[300]),
                         const SizedBox(height: 10),
 
-                        /// 💬 COMMENTS LIST
+                        ///  COMMENTS LIST
                         commentsModels.isEmpty
                             ? Center(
                                 child: Text(
@@ -534,6 +566,23 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                               ),
                                               const SizedBox(height: 4),
                                               Text(comment.text),
+                                              const SizedBox(height: 3),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    formatTime(
+                                                      context,
+                                                      comment.createdAt,
+                                                    ),
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ),

@@ -6,6 +6,7 @@ import 'package:timeago_flutter/timeago_flutter.dart' as timeago;
 import 'package:tourism_app/Constans.dart';
 import 'package:tourism_app/Screens/splash_screen.dart';
 import 'package:tourism_app/cubits/ChangeLanguagCubit.dart';
+import 'package:tourism_app/cubits/Favourite_screen_cubit.dart/Favourite_screen_cubit.dart';
 import 'package:tourism_app/cubits/Feed_screen_cubit/Feed_screen_cubit.dart';
 import 'package:tourism_app/cubits/likeCommentCubit.dart';
 import 'package:tourism_app/firebase_options.dart';
