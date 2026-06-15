@@ -149,5 +149,10 @@
   "somethingWentWrong": "Something went wrong. Please try again",
   "checkInternetConnection": "Please check your internet connection and try again",
   "loginFailed": "Login failed. Please try again",
-  "removeFromFavourite" : "Remove from favourite"
+  "removeFromFavourite" : "Remove from favourite",
+  "editComment": "Edit Comment",
+  "updateYourComment": "Update your comment",
+  "commentEditedSuccessfully": "Comment edited successfully",
+  "commentDeletedSuccessfully": "Comment deleted successfully",
+  "removedFromFavouriteSuccessfully": "Removed from favourites successfully"
 }

@@ -37,7 +37,7 @@ void showNoInternetDialog(BuildContext context) {
 
               /// Message
               Text(
-                "Please check your internet connection.",
+                loc.checkInternetConnection,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),

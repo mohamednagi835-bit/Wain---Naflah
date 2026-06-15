@@ -457,4 +457,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get removeFromFavourite => 'Remove from favourite';
+
+  @override
+  String get editComment => 'Edit Comment';
+
+  @override
+  String get updateYourComment => 'Update your comment';
+
+  @override
+  String get commentEditedSuccessfully => 'Comment edited successfully';
+
+  @override
+  String get commentDeletedSuccessfully => 'Comment deleted successfully';
+
+  @override
+  String get removedFromFavouriteSuccessfully => 'Removed from favourites successfully';
 }

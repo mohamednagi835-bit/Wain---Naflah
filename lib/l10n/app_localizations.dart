@@ -994,6 +994,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove from favourite'**
   String get removeFromFavourite;
+
+  /// No description provided for @editComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Comment'**
+  String get editComment;
+
+  /// No description provided for @updateYourComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your comment'**
+  String get updateYourComment;
+
+  /// No description provided for @commentEditedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment edited successfully'**
+  String get commentEditedSuccessfully;
+
+  /// No description provided for @commentDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment deleted successfully'**
+  String get commentDeletedSuccessfully;
+
+  /// No description provided for @removedFromFavouriteSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favourites successfully'**
+  String get removedFromFavouriteSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

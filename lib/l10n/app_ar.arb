@@ -147,6 +147,10 @@
   "somethingWentWrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى",
   "checkInternetConnection": "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى",
   "loginFailed": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى",
-    "removeFromFavourite" : "إزالة من المفضلة"
-
+    "removeFromFavourite" : "إزالة من المفضلة",
+  "editComment": "تعديل التعليق",
+  "updateYourComment": "قم بتحديث تعليقك",
+  "commentEditedSuccessfully": "تم تعديل التعليق بنجاح",
+  "commentDeletedSuccessfully": "تم حذف التعليق بنجاح",
+  "removedFromFavouriteSuccessfully": "تمت الإزالة من المفضلة بنجاح"
 }

@@ -457,4 +457,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get removeFromFavourite => 'إزالة من المفضلة';
+
+  @override
+  String get editComment => 'تعديل التعليق';
+
+  @override
+  String get updateYourComment => 'قم بتحديث تعليقك';
+
+  @override
+  String get commentEditedSuccessfully => 'تم تعديل التعليق بنجاح';
+
+  @override
+  String get commentDeletedSuccessfully => 'تم حذف التعليق بنجاح';
+
+  @override
+  String get removedFromFavouriteSuccessfully => 'تمت الإزالة من المفضلة بنجاح';
 }

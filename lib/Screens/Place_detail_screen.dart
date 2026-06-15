@@ -8,6 +8,8 @@ import 'package:tourism_app/Widgets/Custom_image.dart';
 import 'package:tourism_app/Widgets/Place_card.dart';
 import 'package:tourism_app/Widgets/Rating_dialog.dart';
 import 'package:tourism_app/Widgets/Show_add_favourite.dart';
+import 'package:tourism_app/Widgets/Show_edit_comment.dart';
+import 'package:tourism_app/Widgets/Show_success_toast.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
 class PlaceDetailsScreen extends StatefulWidget {
@@ -124,6 +126,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                     'createdAt': DateTime.now(),
                     'place': widget.place.id,
                     'user': '${currentUser.firsrName} ${currentUser.lastName}',
+                    'userId': uid,
                   });
                   await FirebaseFirestore.instance
                       .collection('places')
@@ -152,6 +155,8 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                   userName: snapshot.data!.docs[i]['user'],
                   text: snapshot.data!.docs[i]['content'],
                   createdAt: temp.toDate(),
+                  userId: snapshot.data!.docs[i]['userId'],
+                  id: snapshot.data!.docs[i].id,
                 ),
               );
             }
@@ -254,6 +259,16 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                             });
                             showFavoriteToast(context);
                           }
+                          if (value == 'unFavourite') {
+                            ///  Remove from FAVORITE
+                            final doc = await favouritePlacses
+                                .where('userid', isEqualTo: uid)
+                                .where('place', isEqualTo: widget.place.id)
+                                .limit(1)
+                                .get();
+                            await doc.docs.first.reference.delete();
+                            showSuccessToast(context, loc.removeFromFavourite);
+                          }
                         },
 
                         itemBuilder: (context) {
@@ -295,7 +310,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                               ),
 
                               PopupMenuItem(
-                                value: 'favorite',
+                                value: 'unFavorite',
                                 child: Row(
                                   children: [
                                     Icon(Icons.favorite, color: Colors.red),
@@ -473,7 +488,7 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
 
                         const SizedBox(height: 20),
 
-                        /// 💬 HEADER
+                        ///  HEADER
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -532,62 +547,138 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                 itemBuilder: (context, index) {
                                   final comment = commentsModels[index];
 
-                                  return Container(
-                                    margin: const EdgeInsets.only(bottom: 12),
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundColor:
-                                              Colors.green.shade100,
-                                          child: const Icon(
-                                            Icons.person,
-                                            color: Colors.green,
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 3,
+                                        ),
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            14,
                                           ),
                                         ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                comment.userName,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor:
+                                                  Colors.green.shade100,
+                                              child: const Icon(
+                                                Icons.person,
+                                                color: Colors.green,
                                               ),
-                                              const SizedBox(height: 4),
-                                              Text(comment.text),
-                                              const SizedBox(height: 3),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                            ),
+
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    formatTime(
-                                                      context,
-                                                      comment.createdAt,
+                                                    comment.userName,
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    style: TextStyle(
-                                                      fontSize: 11,
+                                                  ),
+
+                                                  const SizedBox(height: 4),
+                                                  Text(comment.text),
+                                                  const SizedBox(height: 8),
+                                                ],
+                                              ),
+                                            ),
+                                            if (uid == comment.userId)
+                                              Column(
+                                                children: [
+                                                  PopupMenuButton<String>(
+                                                    color: Colors.white,
+                                                    icon: Icon(
+                                                      Icons.more_vert,
                                                       color: Colors.grey[600],
                                                     ),
+
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            12,
+                                                          ),
+                                                    ),
+
+                                                    onSelected: (value) async {
+                                                      if (value == 'edit') {
+                                                        ///  RATE
+                                                        showEditCommentBottomSheet(
+                                                          context: context,
+                                                          initialComment:
+                                                              comment.text,
+                                                          commentId: comment.id,
+                                                        );
+                                                      }
+
+                                                      if (value == 'delete') {
+                                                        ///  ADD TO FAVORITE
+                                                        await comments
+                                                            .doc(comment.id)
+                                                            .delete();
+                                                        showSuccessToast(
+                                                          context,
+                                                          loc.commentDeletedSuccessfully,
+                                                        );
+                                                      }
+                                                    },
+
+                                                    itemBuilder: (context) {
+                                                      return [
+                                                        PopupMenuItem(
+                                                          value: 'edit',
+                                                          child: Text(loc.edit),
+                                                        ),
+
+                                                        PopupMenuItem(
+                                                          value: 'delete',
+                                                          child: Text(
+                                                            loc.delete,
+                                                          ),
+                                                        ),
+                                                      ];
+                                                    },
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          left: 16,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              formatTime(
+                                                context,
+                                                comment.createdAt,
+                                              ),
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 12),
+                                    ],
                                   );
                                 },
                               ),
