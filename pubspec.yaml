@@ -67,7 +67,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/WhatsApp Image 2026-04-17 at 8.55.41 PM.jpeg"
+  image_path: "assets/images/logo-removebg-preview.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
