@@ -23,6 +23,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool obscureCurrent = true;
   bool obscureNew = true;
   bool obscureConfirm = true;
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  final formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
   Future<void> changePassword({
@@ -73,180 +75,190 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Form(
+          key: formKey,
+          autovalidateMode: autovalidateMode,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            const SizedBox(height: 20),
+            children: [
+              const SizedBox(height: 20),
 
-            /// HEADER
-            Text(
-              loc.securitySettings,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 10),
-
-            Text(
-              loc.chooseAStrongPasswordToKeepYourAccountSecure,
-              style: TextStyle(color: Colors.grey[600], fontSize: 16),
-            ),
-
-            const SizedBox(height: 40),
-
-            /// CURRENT PASSWORD
-            passwordField(
-              controller: currentPasswordController,
-
-              label: '${loc.enter} ${loc.currentPassword}',
-
-              obscure: obscureCurrent,
-
-              onToggle: () {
-                setState(() {
-                  obscureCurrent = !obscureCurrent;
-                });
-              },
-            ),
-
-            const SizedBox(height: 24),
-
-            /// NEW PASSWORD
-            passwordField(
-              controller: newPasswordController,
-
-              label: '${loc.enter} ${loc.newPassword}',
-
-              obscure: obscureNew,
-
-              onToggle: () {
-                setState(() {
-                  obscureNew = !obscureNew;
-                });
-              },
-            ),
-
-            const SizedBox(height: 24),
-
-            /// CONFIRM PASSWORD
-            passwordField(
-              controller: confirmPasswordController,
-
-              label: '${loc.enter} ${loc.confirmPassword}',
-
-              obscure: obscureConfirm,
-
-              onToggle: () {
-                setState(() {
-                  obscureConfirm = !obscureConfirm;
-                });
-              },
-            ),
-
-            const SizedBox(height: 40),
-
-            /// BUTTON
-            SizedBox(
-              width: double.infinity,
-              height: 58,
-
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E7D32),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-
-                  /// VALIDATION
-                  if (newPasswordController.text !=
-                      confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-
-                        behavior: SnackBarBehavior.floating,
-
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-
-                        content: Text(loc.passwordsDoNotMatch),
-                      ),
-                    );
-                    setState(() {
-                      isLoading = false;
-                    });
-                    return;
-                  }
-
-                  /// TODO:
-                  /// change firebase password
-                  changePassword(
-                    currentPassword: currentPasswordController.text,
-                    newPassword: newPasswordController.text,
-                  );
-                  final uid = FirebaseAuth.instance.currentUser!.uid;
-
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .update({'Password': newPasswordController.text});
-
-                  // await Future.delayed(const Duration(seconds: 2));
-
-                  setState(() {
-                    isLoading = false;
-                  });
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.green,
-
-                        behavior: SnackBarBehavior.floating,
-
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-
-                        content: Text(loc.passwordUpdatedSuccessfully),
-                      ),
-                    );
-                  }
-                  await Future.delayed(const Duration(seconds: 2));
-
-                  await FirebaseAuth.instance.signOut();
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => InitialPage()),
-                    (route) => false,
-                  );
-                },
-
-                child: isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : Text(
-                        loc.updatePassword,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
+              /// HEADER
+              Text(
+                loc.securitySettings,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 10),
+
+              Text(
+                loc.chooseAStrongPasswordToKeepYourAccountSecure,
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
+              ),
+
+              const SizedBox(height: 40),
+
+              /// CURRENT PASSWORD
+              passwordField(
+                controller: currentPasswordController,
+
+                label: '${loc.enter} ${loc.currentPassword}',
+
+                obscure: obscureCurrent,
+
+                onToggle: () {
+                  setState(() {
+                    obscureCurrent = !obscureCurrent;
+                  });
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              /// NEW PASSWORD
+              passwordField(
+                controller: newPasswordController,
+
+                label: '${loc.enter} ${loc.newPassword}',
+
+                obscure: obscureNew,
+
+                onToggle: () {
+                  setState(() {
+                    obscureNew = !obscureNew;
+                  });
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              /// CONFIRM PASSWORD
+              passwordField(
+                controller: confirmPasswordController,
+
+                label: '${loc.enter} ${loc.confirmPassword}',
+
+                obscure: obscureConfirm,
+
+                onToggle: () {
+                  setState(() {
+                    obscureConfirm = !obscureConfirm;
+                  });
+                },
+              ),
+
+              const SizedBox(height: 40),
+
+              /// BUTTON
+              SizedBox(
+                width: double.infinity,
+                height: 58,
+
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2E7D32),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      /// VALIDATION
+                      if (newPasswordController.text !=
+                          confirmPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+
+                            behavior: SnackBarBehavior.floating,
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+
+                            content: Text(loc.passwordsDoNotMatch),
+                          ),
+                        );
+                        setState(() {
+                          isLoading = false;
+                        });
+                        return;
+                      }
+
+                      /// TODO:
+                      /// change firebase password
+                      changePassword(
+                        currentPassword: currentPasswordController.text,
+                        newPassword: newPasswordController.text,
+                      );
+                      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(uid)
+                          .update({'Password': newPasswordController.text});
+
+                      // await Future.delayed(const Duration(seconds: 2));
+
+                      setState(() {
+                        isLoading = false;
+                      });
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+
+                            behavior: SnackBarBehavior.floating,
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+
+                            content: Text(loc.passwordUpdatedSuccessfully),
+                          ),
+                        );
+                      }
+                      await Future.delayed(const Duration(seconds: 2));
+
+                      await FirebaseAuth.instance.signOut();
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => InitialPage()),
+                        (route) => false,
+                      );
+                    } else {
+                      setState(() {
+                        autovalidateMode = AutovalidateMode.always;
+                      });
+                    }
+                  },
+
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : Text(
+                          loc.updatePassword,
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -258,6 +270,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     required bool obscure,
     required VoidCallback onToggle,
   }) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -295,7 +309,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ],
           ),
 
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return loc.requiredField;
+              }
+            },
             onChanged: (value) {
               setState(() {});
             },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
 
-void showErrorDialog(BuildContext context, {String? message}) {
+void showErrorDialog(BuildContext context, {required String message}) {
   showDialog(
     context: context,
     barrierDismissible: true, // user can tap outside
@@ -33,18 +33,18 @@ void showErrorDialog(BuildContext context, {String? message}) {
               const SizedBox(height: 20),
 
               /// Title
-              Text(
-                loc.somethingWentWrong,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
+              // Text(
+              //   loc.somethingWentWrong,
+              //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              // ),
 
-              const SizedBox(height: 10),
+              // const SizedBox(height: 10),
 
               /// Message (dynamic)
               Text(
-                message ?? loc.loginFailed,
+                message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.black),
+                style: const TextStyle(fontSize: 18, color: Colors.black),
               ),
 
               const SizedBox(height: 25),

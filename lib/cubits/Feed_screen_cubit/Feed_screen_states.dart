@@ -10,6 +10,8 @@ class PlacesLoaded extends FeddScreenStates {
   PlacesLoaded({required this.places, required this.placesIds});
 }
 
+class EmptyPlaces extends FeddScreenStates {}
+
 class PlacesError extends FeddScreenStates {
   String errMessage;
   PlacesError({required this.errMessage});

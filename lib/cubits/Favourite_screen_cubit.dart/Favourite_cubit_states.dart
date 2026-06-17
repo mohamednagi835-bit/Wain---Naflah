@@ -10,6 +10,8 @@ class PlacesLoaded extends FavouriteCubitStates {
   PlacesLoaded({required this.places, required this.placesIds});
 }
 
+class EmptyPlaces extends FavouriteCubitStates {}
+
 class PlacesError extends FavouriteCubitStates {
   String errMessage;
   PlacesError({required this.errMessage});

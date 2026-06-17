@@ -15,6 +15,8 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
   final TextEditingController firstNameController = TextEditingController();
 
   final TextEditingController lastNameController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   bool isLoading = false;
 
@@ -45,124 +47,134 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Form(
+          key: formKey,
+          autovalidateMode: autovalidateMode,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            const SizedBox(height: 20),
+            children: [
+              const SizedBox(height: 20),
 
-            /// HEADER
-            Text(
-              loc.updateYourName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+              /// HEADER
+              Text(
+                loc.updateYourName,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            Text(
-              loc.makeSureYourInformationIsAccurate,
-              style: TextStyle(color: Colors.grey[600], fontSize: 16),
-            ),
+              Text(
+                loc.makeSureYourInformationIsAccurate,
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
+              ),
 
-            const SizedBox(height: 40),
+              const SizedBox(height: 40),
 
-            /// FIRST NAME
-            customTextField(
-              controller: firstNameController,
-              label: '${loc.enter} ${loc.firstName}',
-              // icon: Icons.person_outline,
-            ),
+              /// FIRST NAME
+              customTextField(
+                controller: firstNameController,
+                label: '${loc.enter} ${loc.firstName}',
+                // icon: Icons.person_outline,
+              ),
 
-            const SizedBox(height: 22),
+              const SizedBox(height: 22),
 
-            /// LAST NAME
-            customTextField(
-              controller: lastNameController,
-              label: '${loc.enter} ${loc.lastName}',
-              //  icon: Icons.badge_outlined,
-            ),
+              /// LAST NAME
+              customTextField(
+                controller: lastNameController,
+                label: '${loc.enter} ${loc.lastName}',
+                //  icon: Icons.badge_outlined,
+              ),
 
-            const SizedBox(height: 40),
+              const SizedBox(height: 40),
 
-            /// SAVE BUTTON
-            SizedBox(
-              width: double.infinity,
-              height: 58,
+              /// SAVE BUTTON
+              SizedBox(
+                width: double.infinity,
+                height: 58,
 
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E7D32),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2E7D32),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
-                ),
 
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-
-                  /// TODO:
-                  /// update firestore user document
-                  final uid = FirebaseAuth.instance.currentUser!.uid;
-
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uid)
-                      .update({
-                        'First Name': firstNameController.text,
-                        'Last Name': lastNameController.text,
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      setState(() {
+                        isLoading = true;
                       });
 
-                  //  await Future.delayed(const Duration(seconds: 2));
+                      /// TODO:
+                      /// update firestore user document
+                      final uid = FirebaseAuth.instance.currentUser!.uid;
 
-                  setState(() {
-                    isLoading = false;
-                  });
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(uid)
+                          .update({
+                            'First Name': firstNameController.text,
+                            'Last Name': lastNameController.text,
+                          });
 
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
+                      //  await Future.delayed(const Duration(seconds: 2));
 
-                        backgroundColor: Colors.green,
+                      setState(() {
+                        isLoading = false;
+                      });
 
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+
+                            backgroundColor: Colors.green,
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+
+                            content: Text(loc.usernameUpdatedSuccessfully),
+                          ),
+                        );
+                      }
+                      await Future.delayed(const Duration(seconds: 2));
+
+                      await FirebaseAuth.instance.signOut();
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => InitialPage()),
+                        (route) => false,
+                      );
+                    } else {
+                      setState(() {
+                        autovalidateMode = AutovalidateMode.always;
+                      });
+                    }
+                  },
+
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : Text(
+                          loc.saveChanges,
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
-
-                        content: Text(loc.usernameUpdatedSuccessfully),
-                      ),
-                    );
-                  }
-                  await Future.delayed(const Duration(seconds: 2));
-
-                  await FirebaseAuth.instance.signOut();
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => InitialPage()),
-                    (route) => false,
-                  );
-                },
-
-                child: isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : Text(
-                        loc.saveChanges,
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -172,6 +184,8 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
     required TextEditingController controller,
     required String label,
   }) {
+    final loc = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
 
@@ -207,7 +221,12 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
             ],
           ),
 
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return loc.requiredField;
+              }
+            },
             controller: controller,
 
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),

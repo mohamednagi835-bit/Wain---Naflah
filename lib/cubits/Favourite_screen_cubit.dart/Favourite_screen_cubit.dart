@@ -19,20 +19,23 @@ class FavouriteScreenCubit extends Cubit<FavouriteCubitStates> {
 
   Future<void> getFavouritePlaces() async {
     favouritePlacesIds.clear();
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      emit(EmptyPlaces());
+      return;
+    }
     final favouriteSnap = await FirebaseFirestore.instance
         .collection('favourite places')
         .where('userid', isEqualTo: uid)
         .get();
     if (favouriteSnap.docs.isEmpty) {
-      return;
+      emit(EmptyPlaces());
     } else {
       for (int i = 0; i < favouriteSnap.docs.length; i++) {
         favouritePlacesIds.add(favouriteSnap.docs[i]['place'] as String);
       }
     }
   }
-  // .where(FieldPath.documentId, whereIn: favouritePlacesIds)
 
   void subscribeplaces() async {
     //  await getLilkedPlaces();
@@ -44,6 +47,9 @@ class FavouriteScreenCubit extends Cubit<FavouriteCubitStates> {
         .snapshots()
         .listen(
           (snapshot) {
+            if (snapshot.docs.isEmpty) {
+              emit(EmptyPlaces());
+            }
             places.clear();
             for (int i = 0; i < snapshot.docs.length; i++) {
               places.add(PlaceModel.fromFirestore(snapshot.docs[i]));

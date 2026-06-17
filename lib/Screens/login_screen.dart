@@ -26,6 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   bool isBlocked = false;
 
+  Future<void> checkForblock(String email) async {
+    final query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: emailController.text)
+        .get();
+    if (query.docs.isNotEmpty) {
+      if (query.docs.first['isBlocked'] == true) {
+        isBlocked = true;
+      }
+    } else {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
@@ -145,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           isLoading = true;
                         });
+
                         try {
                           var auth = FirebaseAuth.instance;
                           UserCredential userCredential = await auth
@@ -152,6 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 email: emailController.text,
                                 password: passwordController.text,
                               );
+                          //  await checkForblock(emailController.text);
                           //  await Future.delayed(Duration(seconds: 1));
 
                           if (mounted) {
@@ -221,7 +237,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               showNoInternetDialog(context);
 
                             default:
-                              showErrorDialog(context);
+                              showErrorDialog(
+                                context,
+                                message: loc.somethingWentWrong,
+                              );
                           }
                         }
                       } else {

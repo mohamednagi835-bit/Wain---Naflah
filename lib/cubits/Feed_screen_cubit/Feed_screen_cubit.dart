@@ -22,6 +22,9 @@ class FeedScreenCubit extends Cubit<FeddScreenStates> {
         .snapshots()
         .listen(
           (snapshot) {
+            if (snapshot.docs.isEmpty) {
+              emit(EmptyPlaces());
+            }
             places.clear();
             for (int i = 0; i < snapshot.docs.length; i++) {
               places.add(PlaceModel.fromFirestore(snapshot.docs[i]));

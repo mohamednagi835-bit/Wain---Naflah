@@ -46,6 +46,8 @@ class FavouritePlaces extends StatelessWidget {
           builder: (context, state) {
             if (state is PlacesLoading) {
               return Center(child: CircularProgressIndicator());
+            } else if (state is EmptyPlaces) {
+              return Center(child: Text(loc.noPlacesYet));
             } else if (state is PlacesLoaded) {
               return ListView.builder(
                 padding: const EdgeInsets.all(16),

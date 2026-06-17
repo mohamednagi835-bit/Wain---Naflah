@@ -148,6 +148,8 @@ class _FeedScreenState extends State<FeedScreen> {
                 builder: (context, state) {
                   if (state is PlacesLoading) {
                     return Center(child: CircularProgressIndicator());
+                  } else if (state is EmptyPlaces) {
+                    return Center(child: Text(loc.noPlacesYet));
                   } else if (state is PlacesLoaded) {
                     return ListView.builder(
                       controller: widget.feedController,

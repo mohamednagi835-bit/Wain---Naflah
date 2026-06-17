@@ -67,8 +67,10 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
         .get();
     if (doc.docs.isEmpty) {
       isFavourite = false;
+      setState(() {});
     } else {
       isFavourite = true;
+      setState(() {});
     }
   }
 
@@ -259,9 +261,10 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                             });
                             showFavoriteToast(context);
                           }
-                          if (value == 'unFavourite') {
+                          if (value == 'unFavorite') {
                             ///  Remove from FAVORITE
-                            final doc = await favouritePlacses
+                            final doc = await FirebaseFirestore.instance
+                                .collection('favourite places')
                                 .where('userid', isEqualTo: uid)
                                 .where('place', isEqualTo: widget.place.id)
                                 .limit(1)
@@ -628,6 +631,23 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                                         await comments
                                                             .doc(comment.id)
                                                             .delete();
+                                                        widget
+                                                            .place
+                                                            .commentCount--;
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                              'places',
+                                                            )
+                                                            .doc(
+                                                              widget.place.id,
+                                                            )
+                                                            .update({
+                                                              'commentsCount':
+                                                                  widget
+                                                                      .place
+                                                                      .commentCount,
+                                                            });
                                                         showSuccessToast(
                                                           context,
                                                           loc.commentDeletedSuccessfully,
@@ -656,9 +676,10 @@ class _PlaceDetailsScreenState extends State<PlaceDetailsScreen> {
                                           ],
                                         ),
                                       ),
+                                      SizedBox(height: 5),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 16,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
                                         ),
                                         child: Row(
                                           mainAxisAlignment:

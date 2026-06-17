@@ -385,9 +385,17 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                 ),
 
                 onPressed: () async {
+                  if (titleControler.text.isEmpty ||
+                      describtionController.text.isEmpty ||
+                      placeCategory.isEmpty ||
+                      selectedImage == null ||
+                      placeLocation.isEmpty) {
+                    return;
+                  }
                   setState(() {
                     isLoading = true;
                   });
+
                   final storageRef = FirebaseStorage.instance
                       .ref()
                       .child('places')

@@ -334,7 +334,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             showNoInternetDialog(context);
 
                           default:
-                            showErrorDialog(context);
+                            showErrorDialog(
+                              context,
+                              message: loc.somethingWentWrong,
+                            );
                         }
                       }
                       // if (formKey.currentState!.validate()) {
