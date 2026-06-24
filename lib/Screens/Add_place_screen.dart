@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:tourism_app/Global_variables.dart';
 import 'package:tourism_app/Screens/Map_screen.dart';
+import 'package:tourism_app/Widgets/Error_dialog.dart';
 import 'package:tourism_app/Widgets/Map_preview.dart';
 import 'package:tourism_app/Widgets/Show_success_toast.dart';
 import 'package:tourism_app/l10n/app_localizations.dart';
@@ -390,6 +391,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                       placeCategory.isEmpty ||
                       selectedImage == null ||
                       placeLocation.isEmpty) {
+                    showErrorDialog(context, message: loc.enterAllfields);
                     return;
                   }
                   setState(() {

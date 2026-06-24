@@ -154,5 +154,7 @@
   "updateYourComment": "Update your comment",
   "commentEditedSuccessfully": "Comment edited successfully",
   "commentDeletedSuccessfully": "Comment deleted successfully",
-  "removedFromFavouriteSuccessfully": "Removed from favourites successfully"
+  "removedFromFavouriteSuccessfully": "Removed from favourites successfully",
+  "enterPhoneNumber" : "Enter phone number",
+  "enterAllfields" : "Enter all fields"
 }

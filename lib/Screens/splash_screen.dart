@@ -25,20 +25,6 @@ class _SplashScreenState extends State<SplashScreen> {
         MaterialPageRoute(builder: (context) => InitialPage()),
       );
     });
-
-    ///  AUTH / NAVIGATION LOGIC (COMMENTED FOR NOW)
-
-    /*
-    if (AuthService.currentUser == null) {
-      Navigator.pushReplacementNamed(context, '/login');
-    } else if (AuthService.role == "admin") {
-      Navigator.pushReplacementNamed(context, '/admin');
-    } else {
-      Navigator.pushReplacementNamed(context, '/home');
-    }
-    */
-
-    ///  UI ONLY MODE → do nothing for now
   }
 
   @override
@@ -108,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
             // const SizedBox(height: 8),
 
-            // /// 🌍 Subtitle (EN + AR)
+            // ///  Subtitle (EN + AR)
             // const Text(
             //   "Discover Saudi Arabiaاستكشف المملكة العربية السعودية",
             //   textAlign: TextAlign.center,

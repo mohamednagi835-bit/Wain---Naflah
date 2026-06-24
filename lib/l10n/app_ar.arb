@@ -152,5 +152,8 @@
   "updateYourComment": "قم بتحديث تعليقك",
   "commentEditedSuccessfully": "تم تعديل التعليق بنجاح",
   "commentDeletedSuccessfully": "تم حذف التعليق بنجاح",
-  "removedFromFavouriteSuccessfully": "تمت الإزالة من المفضلة بنجاح"
+  "removedFromFavouriteSuccessfully": "تمت الإزالة من المفضلة بنجاح",
+  "enterPhoneNumber" : "أدخل رقم الهاتف",
+    "enterAllfields" : "أدخل جميع الحقول"
+
 }

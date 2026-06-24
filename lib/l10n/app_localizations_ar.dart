@@ -472,4 +472,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get removedFromFavouriteSuccessfully => 'تمت الإزالة من المفضلة بنجاح';
+
+  @override
+  String get enterPhoneNumber => 'أدخل رقم الهاتف';
+
+  @override
+  String get enterAllfields => 'أدخل جميع الحقول';
 }

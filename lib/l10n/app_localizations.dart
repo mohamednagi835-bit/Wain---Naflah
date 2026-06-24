@@ -1024,6 +1024,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Removed from favourites successfully'**
   String get removedFromFavouriteSuccessfully;
+
+  /// No description provided for @enterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get enterPhoneNumber;
+
+  /// No description provided for @enterAllfields.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter all fields'**
+  String get enterAllfields;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

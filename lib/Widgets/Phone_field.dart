@@ -46,6 +46,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
     "+234", // Nigeria
     "+27", // South Africa
   ];
+
   void _updateFullNumber() {
     final full = "$selectedKey${widget.controller.text}";
     widget.onChanged?.call(full);
@@ -77,7 +78,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         ),
         child: Row(
           children: [
-            /// 🌍 Country Code Dropdown
+            ///  Country Code Dropdown
             DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: selectedKey,
@@ -106,7 +107,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
 
             const SizedBox(width: 8),
 
-            /// 📱 Phone Number Input
+            ///  Phone Number Input
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -129,9 +130,9 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                   },
                   controller: widget.controller,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Enter phone number",
+                    hintText: loc.enterPhoneNumber,
                   ),
                 ),
               ),
